@@ -49,7 +49,7 @@ module.exports = React.createClass({
     let _this = this;
     img.onload = function(){
       let [width, height] = [this.width, this.height];
-      let box = ReactDOM.findDOMNode(_this);
+      let box = ReactDOM.findDOMNode(_this.refs.container);
       let [boxWidth, boxHeight] = [box.offsetWidth, box.offsetHeight]
       let ratio = Math.min(boxWidth / width, boxHeight / height);
       _this.setState({
@@ -107,12 +107,34 @@ module.exports = React.createClass({
       this.handleZoom(ev.deltaY);
   },
   handleMouseMove: function(ev) {
-    if(!this.startPoints)
+     if(!this.startPoints)
       return;
     let state = this.state;
-    let posX = ev.pageX - this.startPoints[0];
-    let posY = ev.pageY - this.startPoints[1];
+    let posX, posY;
+    switch(state.rotate) {
+      case 90:
+        posY = this.startPoints[0] - ev.pageX;
+        posX = ev.pageY - this.startPoints[1];
+        break;
+      case 180:
+        posX = this.startPoints[0] - ev.pageX
+        posY = this.startPoints[1] - ev.pageY;
+        break;
+      case 270:
+        posY = ev.pageX - this.startPoints[0];
+        posX = this.startPoints[1] - ev.pageY;
+        break;
+      default:
+        posX = ev.pageX - this.startPoints[0];
+        posY = ev.pageY - this.startPoints[1];
+    }
     this.startPoints = [ev.pageX, ev.pageY]
+
+    if(state.positionX + posX >= 0 || state.positionX + posX <= (state.boxWidth - state.width * state.ratio))
+      posX = 0;
+    if(state.positionY + posY >= 0 || state.positionY + posY <= (state.boxHeight - state.height * state.ratio))
+      posY = 0;
+
     this.setState({
       positionX: state.positionX + posX,
       positionY: state.positionY + posY
@@ -127,7 +149,7 @@ module.exports = React.createClass({
     this.startPoints = [ev.pageX, ev.pageY];
   },
   isInsideImage: function(ev) {
-    let rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    let rect = ReactDOM.findDOMNode(this.refs.container).getBoundingClientRect();
     if(ev.pageY < rect.top || ev.pageY > rect.bottom || ev.pageX < rect.left || ev.pageX > rect.right)
       return false;
     return true;
@@ -157,8 +179,10 @@ module.exports = React.createClass({
     }
     return (
       <div className='lightbox-content-center'>
-        <div className='lightbox-image-container' style={styles}>
-          {loader}
+        <div className='lightbox-image-container' ref='container'>
+          <div className='lightbox-image' style={styles}>
+            {loader}
+          </div>
         </div>
         <ImageModifiers
           handleRotate={this.handleRotate}
