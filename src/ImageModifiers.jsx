@@ -16,10 +16,10 @@ module.exports = React.createClass({
     this.props.handleRotate.call(this, -90);
   },
   handleZoomIn: function() {
-    this.props.handleZoom.call(this, 1);
+    this.props.handleZoom.call(this, 1, 10);
   },
   handleZoomOut: function() {
-    this.props.handleZoom.call(this, -1);
+    this.props.handleZoom.call(this, -1, 10);
   },
   render: function() {
     return (

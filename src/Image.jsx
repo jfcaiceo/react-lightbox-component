@@ -33,15 +33,21 @@ module.exports = React.createClass({
   componentDidMount: function() {
     this.resetImageInitialState(this.props);
     this.startPoints = null;
-    document.addEventListener('mousedown', this.handleMouseDown);
-    document.addEventListener('mousemove', this.handleMouseMove);
-    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener('mousedown', this.handleMoveStart);
+    document.addEventListener('mousemove', this.handleMove);
+    document.addEventListener('mouseup', this.handleMoveEnd);
+    document.addEventListener('touchstart', this.handleMoveStart);
+    document.addEventListener('touchmove', this.handleMove);
+    document.addEventListener('touchend', this.handleMoveEnd);
     document.addEventListener('wheel', this.handleWheel);
   },
   componentWillUnmount: function() {
-    document.removeEventListener('mousedown', this.handleMouseDown);
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('mousedown', this.handleMoveStart);
+    document.removeEventListener('mousemove', this.handleMove);
+    document.removeEventListener('mouseup', this.handleMoveEnd);
+    document.removeEventListener('touchstart', this.handleMoveStart);
+    document.removeEventListener('touchmove', this.handleMove);
+    document.removeEventListener('touchend', this.handleMoveEnd);
     document.removeEventListener('wheel', this.handleWheel);
   },
   resetImageInitialState: function(props) {
@@ -71,8 +77,8 @@ module.exports = React.createClass({
       rotate: (360 + this.state.rotate + angle) % 360
     })
   },
-  handleZoom: function(direction) {
-    let percent = direction > 0 ? ZOOM_STEP : 1 / ZOOM_STEP;
+  handleZoom: function(direction, scale = 1) {
+    let percent = direction > 0 ? Math.pow(ZOOM_STEP, scale) : Math.pow(1 / ZOOM_STEP, scale);
     let ratio = this.setZoomLimits(this.state.ratio * percent);
     let state = this. state;
 
@@ -106,8 +112,9 @@ module.exports = React.createClass({
     if(this.isInsideImage(ev))
       this.handleZoom(ev.deltaY);
   },
-  handleMouseMove: function(ev) {
-     if(!this.startPoints)
+  handleMove: function(ev) {
+    ev = this.getEv(ev);
+    if(!this.startPoints)
       return;
     let state = this.state;
     let posX, posY;
@@ -140,10 +147,11 @@ module.exports = React.createClass({
       positionY: state.positionY + posY
     });
   },
-  handleMouseUp: function(ev) {
+  handleMoveEnd: function(ev) {
     this.startPoints = null;
   },
-  handleMouseDown: function(ev) {
+  handleMoveStart: function(ev) {
+    ev = this.getEv(ev);
     if(!this.isInsideImage(ev) || ev.which != 1)
       return;
     this.startPoints = [ev.pageX, ev.pageY];
@@ -153,6 +161,11 @@ module.exports = React.createClass({
     if(ev.pageY < rect.top || ev.pageY > rect.bottom || ev.pageX < rect.left || ev.pageX > rect.right)
       return false;
     return true;
+  },
+  getEv: function (ev) {
+    if(ev.type === 'touchstart' || ev.type === 'touchmove' || ev.type === 'touchend')
+      return {pageX: ev.touches[0].pageX, pageY: ev.touches[0].pageY, which: 1}
+    return ev
   },
   render: function() {
     let [props, state] = [this.props, this.state];
