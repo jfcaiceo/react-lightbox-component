@@ -3,6 +3,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ImageModifiers = require('./ImageModifiers');
+const ZOOM_STEP = 1.05;
+const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 40), Math.pow(1 / ZOOM_STEP, 10)];
 
 module.exports = React.createClass({
   displayName: 'Image',
@@ -12,22 +14,24 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       loader: true,
-      sizeX: '100%',
-      sizeY: 'auto',
+      ratio: 1,
       positionX: 0,
       positionY: 0,
       rotate: 0,
       width: 0,
-      height: 0
+      height: 0,
+      boxWidth: 0,
+      boxHeight: 0
     };
   },
   componentWillMount: function() {
-    this.resetImageInitialState(this.props);
+    //this.resetImageInitialState(this.props);
   },
   componentWillReceiveProps: function(nextProps) {
     this.resetImageInitialState(nextProps);
   },
   componentDidMount: function() {
+    this.resetImageInitialState(this.props);
     this.startPoints = null;
     document.addEventListener('mousedown', this.handleMouseDown);
     document.addEventListener('mousemove', this.handleMouseMove);
@@ -44,14 +48,20 @@ module.exports = React.createClass({
     let img = new Image();
     let _this = this;
     img.onload = function(){
-      let [sizeX, sizeY] = _this.getDefaultSize(this.width, this.height);
+      let [width, height] = [this.width, this.height];
+      let box = ReactDOM.findDOMNode(_this);
+      let [boxWidth, boxHeight] = [box.offsetWidth, box.offsetHeight]
+      let ratio = Math.min(boxWidth / width, boxHeight / height);
       _this.setState({
         loader: false,
-        sizeX: sizeX,
-        sizeY: sizeY,
+        ratio: ratio,
         rotate: 0,
+        positionX: (boxWidth - width * ratio) / 2,
+        positionY: (boxHeight - height * ratio) / 2,
         width: this.width,
-        height: this.height
+        height: this.height,
+        boxWidth: boxWidth,
+        boxHeight: boxHeight
       })
     };
     img.src = props.src;
@@ -62,21 +72,35 @@ module.exports = React.createClass({
     })
   },
   handleZoom: function(direction) {
-    let percent = direction > 0 ? 5 : -5;
-    let sizeX = parseInt(this.state.sizeX);
-    let sizeY = parseInt(this.state.sizeY);
-    if(!isNaN(sizeX)) {
-      sizeX = `${sizeX + percent}%`;
-      sizeY = 'auto';
-    }
-    else {
-      sizeY = `${sizeY + percent}%`;
-      sizeX = 'auto';
-    }
+    let percent = direction > 0 ? ZOOM_STEP : 1 / ZOOM_STEP;
+    let ratio = this.setZoomLimits(this.state.ratio * percent);
+    let state = this. state;
+
+    // Center image from container's center
+    let offsetX = state.boxWidth / 2;
+    let offsetY = state.boxHeight / 2;
+
+    let bgCursorX = offsetX - state.positionX;
+    let bgCursorY = offsetY - state.positionY;
+
+    let bgRatioX = bgCursorX/(state.width * state.ratio);
+    let bgRatioY = bgCursorY/(state.height * state.ratio);
+
     this.setState({
-      sizeX: sizeX,
-      sizeY: sizeY
+      ratio: ratio,
+      positionX: offsetX - (state.width * ratio * bgRatioX),
+      positionY: offsetY - (state.height * ratio * bgRatioY)
     })
+  },
+  setZoomLimits: function(size) {
+    let state = this.state;
+    let originalRatio = Math.min(state.boxWidth / state.width, state.boxHeight / state.height);
+    if((size / originalRatio) > MAX_ZOOM_SIZE)
+      return MAX_ZOOM_SIZE * originalRatio;
+    else if((size / originalRatio) < MIN_ZOOM_SIZE)
+      return MIN_ZOOM_SIZE * originalRatio;
+    else
+      return size;
   },
   handleWheel: function(ev) {
     if(this.isInsideImage(ev))
@@ -98,20 +122,15 @@ module.exports = React.createClass({
     this.startPoints = null;
   },
   handleMouseDown: function(ev) {
-    if(this.isInsideImage(ev))
-      this.startPoints = [ev.pageX, ev.pageY];
+    if(!this.isInsideImage(ev) || ev.which != 1)
+      return;
+    this.startPoints = [ev.pageX, ev.pageY];
   },
   isInsideImage: function(ev) {
     let rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     if(ev.pageY < rect.top || ev.pageY > rect.bottom || ev.pageX < rect.left || ev.pageX > rect.right)
       return false;
     return true;
-  },
-  getDefaultSize: function(w, h) {
-    if(h > w)
-      return ['auto', '100%']
-    else
-      return ['100%', 'auto']
   },
   render: function() {
     let [props, state] = [this.props, this.state];
@@ -130,8 +149,8 @@ module.exports = React.createClass({
       height: '100%',
       backgroundImage: background,
       backgroundRepeat: 'no-repeat',
-      backgroundSize: `${state.sizeX} ${state.sizeY}`,
-      backgroundPosition: `calc(50% + ${state.positionX}px) calc(50% + ${state.positionY}px)`,
+      backgroundSize: `${state.width * state.ratio}px ${state.height * state.ratio}px`,
+      backgroundPosition: `${state.positionX}px ${state.positionY}px`,
       MsTransform: transform,
       WebkitTransform: transform,
       transform: transform
