@@ -3,8 +3,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ImageModifiers = require('./ImageModifiers');
-const ZOOM_STEP = 1.05;
-const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 40), Math.pow(1 / ZOOM_STEP, 10)];
+const ZOOM_STEP = 1.10;
+const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 30), Math.pow(1 / ZOOM_STEP, 10)];
 
 module.exports = React.createClass({
   displayName: 'Image',
@@ -23,9 +23,6 @@ module.exports = React.createClass({
       boxWidth: 0,
       boxHeight: 0
     };
-  },
-  componentWillMount: function() {
-    //this.resetImageInitialState(this.props);
   },
   componentWillReceiveProps: function(nextProps) {
     this.resetImageInitialState(nextProps);
@@ -67,7 +64,8 @@ module.exports = React.createClass({
         width: this.width,
         height: this.height,
         boxWidth: boxWidth,
-        boxHeight: boxHeight
+        boxHeight: boxHeight,
+        moving: false
       })
     };
     img.src = props.src;
@@ -149,12 +147,18 @@ module.exports = React.createClass({
   },
   handleMoveEnd: function(ev) {
     this.startPoints = null;
+    this.setState({
+      moving: false
+    })
   },
   handleMoveStart: function(ev) {
     ev = this.getEv(ev);
     if(!this.isInsideImage(ev) || ev.which != 1)
       return;
     this.startPoints = [ev.pageX, ev.pageY];
+    this.setState({
+      moving: true
+    })
   },
   isInsideImage: function(ev) {
     let rect = ReactDOM.findDOMNode(this.refs.container).getBoundingClientRect();
@@ -192,14 +196,14 @@ module.exports = React.createClass({
     }
     return (
       <div className='lightbox-content-center'>
-        <div className='lightbox-image-container' ref='container'>
-          <div className='lightbox-image' style={styles}>
-            {loader}
-          </div>
-        </div>
         <ImageModifiers
           handleRotate={this.handleRotate}
           handleZoom={this.handleZoom}/>
+        <div className='lightbox-image-container' ref='container'>
+          <div className={'lightbox-image' + (state.moving ? ' moving' : '')} style={styles}>
+            {loader}
+          </div>
+        </div>
       </div>
     )
   }

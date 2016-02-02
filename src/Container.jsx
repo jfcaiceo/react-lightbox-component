@@ -63,7 +63,7 @@ module.exports = React.createClass({
         <div className='lightbox-btn-close'>
           <button className='lightbox-btn' onClick={props.toggleLightbox}><i className='fa fa-lg fa-times'/></button>
         </div>
-        <div className='lightbox-content-left'>
+        <div className='lightbox-title-content'>
           <div className='lightbox-title'>
             {image.title}
           </div>

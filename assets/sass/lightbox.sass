@@ -1,7 +1,10 @@
+@import variables
+
 .lightbox-container
   img
     margin: 5px
     cursor: pointer
-    &:hover
-      padding: 8px
-      transition: padding 200ms ease
+    @media (min-width: $medium_width)
+      &:hover
+        padding: 8px
+        transition: padding 200ms ease
