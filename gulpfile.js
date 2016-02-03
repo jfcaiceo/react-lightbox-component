@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
-    //package = require('./package.json'),
+    karma = require('karma').Server,
     reload = browserSync.reload;
 
 /**
@@ -76,6 +76,24 @@ gulp.task('js:min', function() {
   .pipe(gulp.dest('./dist/js'));
 })
 
+/** Run karma once */
+gulp.task('test', function (cb) {
+  var server = new karma({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, cb)
+  server.start();
+})
+
+/** Run karma */
+gulp.task('tdd', function (cb) {
+  console.log("Running TDD");
+  var server = new karma({
+    configFile: __dirname + '/karma.conf.js'
+  }, cb);
+  server.start();
+})
+
 /**
  * Compiling resources
  */
@@ -91,3 +109,15 @@ gulp.task('serve', ['clean', 'sass', 'js', 'server'], function() {
    'sass', 'js', browserSync.reload
   ]);
 })
+
+gulp.task('default', function() {
+  console.log("gulp build       -> Build all javascripts and stylesheets");
+  console.log("gulp server      -> Launch a web browser on localhost:3000");
+  console.log("gulp clean       -> Clean the dist directory");
+  console.log("gulp sass        -> Build the styles into the dist directory");
+  console.log("gulp sass:min    -> Build the minified styles");
+  console.log("gulp js          -> Build the javascripts into the dist directory");
+  console.log("gulp js:min      -> Build the minified javascript");
+  console.log("gulp test        -> Execute the tests once with config file karma.conf.js");
+  console.log("gulp tdd         -> Execute the tests continuosly with config file karma.conf.js");
+});
