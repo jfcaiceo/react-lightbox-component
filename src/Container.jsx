@@ -71,7 +71,7 @@ module.exports = React.createClass({
             {image.description}
           </div>
         </div>
-        <Image src={image.src}/>
+        <Image src={image.src} showImageModifiers={props.showImageModifiers}/>
         {leftButton}
         {rightButton}
       </div>

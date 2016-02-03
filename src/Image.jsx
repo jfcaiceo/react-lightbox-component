@@ -9,7 +9,8 @@ const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 30), Math.pow(1 / ZO
 module.exports = React.createClass({
   displayName: 'Image',
   propTypes: {
-    src: React.PropTypes.string.isRequired
+    src: React.PropTypes.string.isRequired,
+    showImageModifiers: React.PropTypes.bool.isRequired
   },
   getInitialState: function() {
     return {
@@ -30,13 +31,15 @@ module.exports = React.createClass({
   componentDidMount: function() {
     this.resetImageInitialState(this.props);
     this.startPoints = null;
-    document.addEventListener('mousedown', this.handleMoveStart);
-    document.addEventListener('mousemove', this.handleMove);
-    document.addEventListener('mouseup', this.handleMoveEnd);
-    document.addEventListener('touchstart', this.handleMoveStart);
-    document.addEventListener('touchmove', this.handleMove);
-    document.addEventListener('touchend', this.handleMoveEnd);
-    document.addEventListener('wheel', this.handleWheel);
+    if(this.props.showImageModifiers) {
+      document.addEventListener('mousedown', this.handleMoveStart);
+      document.addEventListener('mousemove', this.handleMove);
+      document.addEventListener('mouseup', this.handleMoveEnd);
+      document.addEventListener('touchstart', this.handleMoveStart);
+      document.addEventListener('touchmove', this.handleMove);
+      document.addEventListener('touchend', this.handleMoveEnd);
+      document.addEventListener('wheel', this.handleWheel);
+    }
   },
   componentWillUnmount: function() {
     document.removeEventListener('mousedown', this.handleMoveStart);
@@ -79,21 +82,32 @@ module.exports = React.createClass({
     let percent = direction > 0 ? Math.pow(ZOOM_STEP, scale) : Math.pow(1 / ZOOM_STEP, scale);
     let ratio = this.setZoomLimits(this.state.ratio * percent);
     let state = this. state;
+    let delta = 0.05;
+    let newPositionX, newPositionY
 
-    // Center image from container's center
-    let offsetX = state.boxWidth / 2;
-    let offsetY = state.boxHeight / 2;
+    if(Math.min(state.boxWidth / state.width, state.boxHeight / state.height) >= (ratio - delta) ){
+      newPositionX = (state.boxWidth - state.width * ratio) / 2;
+      newPositionY = (state.boxHeight - state.height * ratio) / 2;
+    }
+    else {
+      // Center image from container's center
+      let offsetX = state.boxWidth / 2;
+      let offsetY = state.boxHeight / 2;
 
-    let bgCursorX = offsetX - state.positionX;
-    let bgCursorY = offsetY - state.positionY;
+      let bgCursorX = offsetX - state.positionX;
+      let bgCursorY = offsetY - state.positionY;
 
-    let bgRatioX = bgCursorX/(state.width * state.ratio);
-    let bgRatioY = bgCursorY/(state.height * state.ratio);
+      let bgRatioX = bgCursorX/(state.width * state.ratio);
+      let bgRatioY = bgCursorY/(state.height * state.ratio);
+
+      newPositionX = offsetX - (state.width * ratio * bgRatioX);
+      newPositionY = offsetY - (state.height * ratio * bgRatioY);
+    }
 
     this.setState({
       ratio: ratio,
-      positionX: offsetX - (state.width * ratio * bgRatioX),
-      positionY: offsetY - (state.height * ratio * bgRatioY)
+      positionX: newPositionX,
+      positionY: newPositionY
     })
   },
   setZoomLimits: function(size) {
@@ -174,7 +188,15 @@ module.exports = React.createClass({
   render: function() {
     let [props, state] = [this.props, this.state];
     let background = `url(${props.src})`;
-    let loader;
+    let modifiers, loader;
+    if(props.showImageModifiers) {
+      modifiers = (
+        <ImageModifiers
+          handleRotate={this.handleRotate}
+          handleZoom={this.handleZoom}
+          currentImage={props.src}/>
+      )
+    }
     if(state.loader){
       background = 'none';
       loader = (
@@ -196,9 +218,7 @@ module.exports = React.createClass({
     }
     return (
       <div className='lightbox-content-center'>
-        <ImageModifiers
-          handleRotate={this.handleRotate}
-          handleZoom={this.handleZoom}/>
+        {modifiers}
         <div className='lightbox-image-container' ref='container'>
           <div className={'lightbox-image' + (state.moving ? ' moving' : '')} style={styles}>
             {loader}

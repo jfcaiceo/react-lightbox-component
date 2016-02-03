@@ -24,7 +24,7 @@ module.exports = React.createClass({
       showImageModifiers: true,
       thumbnailWidth: '80px',
       thumbnailHeight: '80px',
-      renderImageFunc: (image, toggleLightbox, width, height) => { 
+      renderImageFunc: (idx, image, toggleLightbox, width, height) => { 
         return (
           <img
             key={image.src}
@@ -32,26 +32,29 @@ module.exports = React.createClass({
             className='img-responsive img-thumbnail'
             style={{width: width, height: height}}
             alt={image.title}
-            onClick={toggleLightbox} />
+            onClick={toggleLightbox.bind(null, idx)} />
         )
       }
     };
   },
   getInitialState: function() {
     return {
-      showLightbox: false
+      showLightbox: false,
+      selectedImage: 0
     };
   },
-  toggleLightbox: function(ev) {
+  toggleLightbox: function(idx) {
     this.setState({
-      showLightbox: !this.state.showLightbox
+      showLightbox: !this.state.showLightbox,
+      selectedImage: idx
     });
   },
   render: function() {
     let props = this.props;
-    let images = props.images.map(image => {
+    let images = props.images.map((image, idx) => {
       return props.renderImageFunc.call(
         this,
+        idx,
         image,
         this.toggleLightbox,
         props.thumbnailWidth,
@@ -63,7 +66,8 @@ module.exports = React.createClass({
       container = (
         <Container
           {...this.props} 
-          toggleLightbox={this.toggleLightbox} />
+          toggleLightbox={this.toggleLightbox}
+          selectedImage={this.state.selectedImage} />
       )
 
     return (

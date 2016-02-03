@@ -7,7 +7,8 @@ module.exports = React.createClass({
   displayName: 'Image',
   propTypes: {
     handleRotate: React.PropTypes.func.isRequired,
-    handleZoom: React.PropTypes.func.isRequired
+    handleZoom: React.PropTypes.func.isRequired,
+    currentImage: React.PropTypes.string.isRequired
   },
   handleRotateClockwise: function() {
     this.props.handleRotate.call(this, 90);
@@ -36,6 +37,9 @@ module.exports = React.createClass({
         <button className='lightbox-btn' onClick={this.handleRotateClockwise}>
           <i className='fa fa-rotate-right' />
         </button>
+        <a className='lightbox-btn a-padding' download href={this.props.currentImage} >
+          <i className='fa fa-download' />
+        </a>
       </div>
     )
   }
