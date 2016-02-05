@@ -36,7 +36,7 @@ describe("Lightbox container component", function() {
       <Lightbox  images={imagesData}/>
     );
 
-    var image = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'img-thumbnail')[0];
+    var image = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail')[0];
     TestUtils.Simulate.click(image)
     
     var closeButtonContainer = TestUtils.findRenderedDOMComponentWithClass(lightbox, 'lightbox-btn-close');

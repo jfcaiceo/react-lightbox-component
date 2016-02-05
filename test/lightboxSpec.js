@@ -16,7 +16,7 @@ describe("Lightbox component", function() {
   });
 
   it("renders and shows image thumbnails", function() {
-    var images = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'img-thumbnail');
+    var images = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail');
     expect(images.length).toEqual(imagesData.length);
     expect(TestUtils.isDOMComponent(images[0]));
   });
@@ -24,7 +24,7 @@ describe("Lightbox component", function() {
   it("renders container on image click", function() {
     var container = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-backdrop')
     expect(container.length).toEqual(0);
-    var image = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'img-thumbnail')[0];
+    var image = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail')[0];
     TestUtils.Simulate.click(image)
     
     container = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-backdrop')
@@ -33,7 +33,7 @@ describe("Lightbox component", function() {
 
   it("transfer the cliked image id to the container", function() {
     var imageIndex = 1;
-    var image = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'img-thumbnail')[imageIndex];
+    var image = TestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail')[imageIndex];
     TestUtils.Simulate.click(image);
     
     var container = TestUtils.findRenderedComponentWithType(lightbox, Container); 

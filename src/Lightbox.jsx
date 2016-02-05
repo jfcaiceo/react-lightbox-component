@@ -27,9 +27,9 @@ module.exports = React.createClass({
       renderImageFunc: (idx, image, toggleLightbox, width, height) => { 
         return (
           <img
-            key={image.src}
+            key={idx}
             src={ !!image.thumbnail ? image.thumbnail : image.src  }
-            className='img-responsive img-thumbnail'
+            className='lightbox-img-thumbnail'
             style={{width: width, height: height}}
             alt={image.title}
             onClick={toggleLightbox.bind(null, idx)} />
