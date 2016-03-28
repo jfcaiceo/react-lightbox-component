@@ -4,7 +4,7 @@ An image lightbox component for ReactJS. A demo can be viewed [here](http://jfca
 
 ## Installation
 
-`npm install react-d3`
+`npm install react-lightbox-component`
 
 ## Basic Usage
 
