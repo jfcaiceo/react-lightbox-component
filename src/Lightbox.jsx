@@ -2,7 +2,6 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Portal = require('./Portal');
 var Container = require('./Container');
 
 module.exports = React.createClass({

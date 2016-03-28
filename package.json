@@ -37,10 +37,19 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7"
   },
+  "main": "lib/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jfcaiceo/react-lightbox-component.git"
+  },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "build": "babel --presets es2015,react src/ --out-dir lib/",
+    "prepublish": "npm run build"
   }
 }
