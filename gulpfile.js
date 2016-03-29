@@ -102,7 +102,7 @@ gulp.task('build', ['clean', 'sass', 'sass:min', 'js', 'js:min'])
 /**
  * Compiling resources and serving application
  */
-gulp.task('serve', ['clean', 'sass', 'js', 'server'], function() {
+gulp.task('serve', ['clean', 'sass:min', 'js', 'server'], function() {
   return gulp.watch([
     './src/**/*.js', './src/**/*.jsx', './index.html', './assets/sass/**/*.sass'
   ], [
