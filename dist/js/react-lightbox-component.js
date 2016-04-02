@@ -11,17 +11,33 @@ module.exports = React.createClass({
     selectedImage: React.PropTypes.number,
     images: React.PropTypes.array.isRequired,
     toggleLightbox: React.PropTypes.func.isRequired,
-    showImageModifiers: React.PropTypes.bool
+    showImageModifiers: React.PropTypes.bool,
+    renderDescriptionFunc: React.PropTypes.func
   },
   getDefaultProps: function getDefaultProps() {
     return {
-      selectedImage: 0
+      selectedImage: 0,
+      renderDescriptionFunc: function renderDescriptionFunc(image) {
+        return React.createElement(
+          'div',
+          null,
+          'image.description'
+        );
+      }
     };
   },
   getInitialState: function getInitialState() {
     return {
       selectedImageIndex: this.props.selectedImage
     };
+  },
+  componentWillMount: function componentWillMount() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.scroll = "no"; // ie only
+  },
+  componentWillUnmount: function componentWillUnmount() {
+    document.documentElement.style.overflow = 'auto';
+    document.body.scroll = "yes"; // ie only
   },
   handleLeftClick: function handleLeftClick() {
     if (this.canMoveToLeft()) {
@@ -48,8 +64,10 @@ module.exports = React.createClass({
     var state = this.state;
 
     var image = props.images[state.selectedImageIndex];
-    var leftButton = undefined,
-        rightButton = undefined;
+    var leftButton = void 0,
+        rightButton = void 0;
+    var description = props.renderDescriptionFunc.call(this, image);
+
     if (this.canMoveToLeft()) leftButton = React.createElement(
       'div',
       { className: 'lightbox-btn-left' },
@@ -91,7 +109,7 @@ module.exports = React.createClass({
         React.createElement(
           'div',
           { className: 'lightbox-description' },
-          image.description
+          description
         )
       ),
       React.createElement(Image, { src: image.src, showImageModifiers: props.showImageModifiers }),
@@ -110,6 +128,7 @@ var ImageModifiers = require('./ImageModifiers');
 var ZOOM_STEP = 1.10;
 var MAX_ZOOM_SIZE = Math.pow(ZOOM_STEP, 30);
 var MIN_ZOOM_SIZE = Math.pow(1 / ZOOM_STEP, 10);
+
 
 module.exports = React.createClass({
   displayName: 'Image',
@@ -194,8 +213,8 @@ module.exports = React.createClass({
     var ratio = this.setZoomLimits(this.state.ratio * percent);
     var state = this.state;
     var delta = 0.05;
-    var newPositionX = undefined,
-        newPositionY = undefined;
+    var newPositionX = void 0,
+        newPositionY = void 0;
 
     if (Math.min(state.boxWidth / state.width, state.boxHeight / state.height) >= ratio - delta) {
       newPositionX = (state.boxWidth - state.width * ratio) / 2;
@@ -233,8 +252,8 @@ module.exports = React.createClass({
     ev = this.getEv(ev);
     if (!this.startPoints) return;
     var state = this.state;
-    var posX = undefined,
-        posY = undefined;
+    var posX = void 0,
+        posY = void 0;
     switch (state.rotate) {
       case 90:
         posY = this.startPoints[0] - ev.pageX;
@@ -290,8 +309,8 @@ module.exports = React.createClass({
     var state = this.state;
 
     var background = 'url(' + props.src + ')';
-    var modifiers = undefined,
-        loader = undefined;
+    var modifiers = void 0,
+        loader = void 0;
     if (props.showImageModifiers) {
       modifiers = React.createElement(ImageModifiers, {
         handleRotate: this.handleRotate,
@@ -399,7 +418,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var React = (window.React);
 var ReactDOM = (window.ReactDOM);
-var Portal = require('./Portal');
 var Container = require('./Container');
 
 module.exports = React.createClass({
@@ -414,7 +432,8 @@ module.exports = React.createClass({
     showImageModifiers: React.PropTypes.bool,
     thumbnailWidth: React.PropTypes.string,
     thumbnailHeight: React.PropTypes.string,
-    renderImageFunc: React.PropTypes.func
+    renderImageFunc: React.PropTypes.func,
+    renderDescriptionFunc: React.PropTypes.func
   },
   getDefaultProps: function getDefaultProps() {
     return {
@@ -451,7 +470,7 @@ module.exports = React.createClass({
     var images = props.images.map(function (image, idx) {
       return props.renderImageFunc.call(_this, idx, image, _this.toggleLightbox, props.thumbnailWidth, props.thumbnailHeight);
     });
-    var container = undefined;
+    var container = void 0;
     if (this.state.showLightbox) container = React.createElement(Container, _extends({}, this.props, {
       toggleLightbox: this.toggleLightbox,
       selectedImage: this.state.selectedImage }));
@@ -465,23 +484,10 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Container":1,"./Portal":5}],5:[function(require,module,exports){
-'use strict';
-
-var React = (window.React);
-var ReactDOM = (window.ReactDOM);
-
-module.exports = React.createClass({
-  displayName: 'Portal',
-  render: function render() {
-    return React.createElement('div', { className: 'react-lightbox' });
-  }
-});
-
-},{}],6:[function(require,module,exports){
+},{"./Container":1}],5:[function(require,module,exports){
 'use strict';
 
 exports.Lightbox = require('./Lightbox');
 
-},{"./Lightbox":4}]},{},[6])(6)
+},{"./Lightbox":4}]},{},[5])(5)
 });
