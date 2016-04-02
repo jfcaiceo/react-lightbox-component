@@ -22,6 +22,14 @@ module.exports = React.createClass({
       selectedImageIndex: this.props.selectedImage
     };
   },
+  componentWillMount: function() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.scroll = "no"; // ie only
+  },
+  componentWillUnmount: function() {
+    document.documentElement.style.overflow = 'auto';
+    document.body.scroll = "yes"; // ie only
+  },
   handleLeftClick: function(){
     if (this.canMoveToLeft()) {
       this.setState({

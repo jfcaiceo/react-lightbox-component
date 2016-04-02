@@ -8,6 +8,7 @@ var gulp = require('gulp'),
       "react": "React",
       "react-dom": "ReactDOM",
     }),
+    babel = require('gulp-babel'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     browserSync = require('browser-sync'),
@@ -74,6 +75,13 @@ gulp.task('js:min', function() {
   .pipe(buffer())
   .pipe(uglify())
   .pipe(gulp.dest('./dist/js'));
+})
+
+/** JavaScript docs compilation */
+gulp.task('docs', function() {
+  return gulp.src('docs/main.jsx')
+  .pipe(babel({presets: ['es2015', 'react']}))
+  .pipe(gulp.dest('docs/'));
 })
 
 /** Run karma once */
