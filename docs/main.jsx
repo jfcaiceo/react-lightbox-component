@@ -37,8 +37,7 @@
   ReactDOM.render(
     <ReactLightbox.Lightbox
       images={images}
-      renderImageFunc={
-        function(idx, image, toggleLightbox, width, height) {
+      renderImageFunc={(idx, image, toggleLightbox, width, height) => {
           return <img key={idx} src={image.src} className='img-circle' style={{width: width, height: height}} onClick={toggleLightbox.bind(null, idx)} />
         }
       }
@@ -49,8 +48,7 @@
   ReactDOM.render(
     <ReactLightbox.Lightbox
       images={images}
-      renderDescriptionFunc={
-        function(image){
+      renderDescriptionFunc={(image) => {
           return (
             <div>
               <p style={{color:'red'}}>{image.description + ' (' + image.src + ')'}</p>

@@ -29,4 +29,19 @@
       return React.createElement('img', { key: idx, src: image.src, className: 'img-circle', style: { width: width, height: height }, onClick: toggleLightbox.bind(null, idx) });
     }
   }), document.getElementById('custom-thumbnails'));
+  // Set custom description
+  ReactDOM.render(React.createElement(ReactLightbox.Lightbox, {
+    images: images,
+    renderDescriptionFunc: function renderDescriptionFunc(image) {
+      return React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'p',
+          { style: { color: 'red' } },
+          image.description + ' (' + image.src + ')'
+        )
+      );
+    }
+  }), document.getElementById('custom-descriptions'));
 })();

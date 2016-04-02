@@ -102,7 +102,9 @@
   images={images}
   renderDescriptionFunc={(image) => {
     return (
-      &lt;div&gt;image.description &lt;/div&gt;
+      &lt;div&gt;
+        &lt;p style={{color: 'red'}}&gt;{image.description + ' (' + image.src + ')'}&lt;/p&gt;
+      &lt;/div&gt;
     )
   }}/&gt;
             </code>
