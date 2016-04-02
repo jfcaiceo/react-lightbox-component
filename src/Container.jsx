@@ -19,7 +19,7 @@ module.exports = React.createClass({
       renderDescriptionFunc: (image) => {
         return (
             <div>
-              image.description
+              {image.description}
             </div>
         )
       }
