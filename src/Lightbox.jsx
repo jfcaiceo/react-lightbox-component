@@ -16,7 +16,8 @@ module.exports = React.createClass({
     showImageModifiers: React.PropTypes.bool,
     thumbnailWidth: React.PropTypes.string,
     thumbnailHeight: React.PropTypes.string,
-    renderImageFunc: React.PropTypes.func
+    renderImageFunc: React.PropTypes.func,
+    renderDescriptionFunc: React.PropTypes.func
   },
   getDefaultProps: function() {
     return {

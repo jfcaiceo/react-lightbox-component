@@ -10,11 +10,19 @@ module.exports = React.createClass({
     selectedImage: React.PropTypes.number,
     images: React.PropTypes.array.isRequired,
     toggleLightbox: React.PropTypes.func.isRequired,
-    showImageModifiers: React.PropTypes.bool
+    showImageModifiers: React.PropTypes.bool,
+    renderDescriptionFunc: React.PropTypes.func
   },
   getDefaultProps: function() {
     return {
       selectedImage: 0,
+      renderDescriptionFunc: (image) => {
+        return (
+            <div>
+              image.description
+            </div>
+        )
+      }
     }
   },
   getInitialState: function() {
@@ -54,6 +62,8 @@ module.exports = React.createClass({
     let [props, state] = [this.props, this.state];
     let image = props.images[state.selectedImageIndex];
     let leftButton, rightButton;
+    let description = props.renderDescriptionFunc.call(this, image);
+
     if(this.canMoveToLeft())
       leftButton = (
         <div className='lightbox-btn-left'>
@@ -76,7 +86,7 @@ module.exports = React.createClass({
             {image.title}
           </div>
           <div className='lightbox-description'>
-            {image.description}
+            {description}
           </div>
         </div>
         <Image src={image.src} showImageModifiers={props.showImageModifiers}/>

@@ -45,4 +45,20 @@
     />,
     document.getElementById('custom-thumbnails')
   );
+  // Set custom description
+  ReactDOM.render(
+    <ReactLightbox.Lightbox
+      images={images}
+      renderDescriptionFunc={
+        function(image){
+          return (
+            <div>
+              <p style={{color:'red'}}>{image.description + ' (' + image.src + ')'}</p>
+            </div>
+          )
+        }
+      }
+    />,
+    document.getElementById('custom-descriptions')
+  );
 })();

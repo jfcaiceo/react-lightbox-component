@@ -91,6 +91,24 @@
           </pre>
         </div>
       </div>
+      <div class="row">
+        <h4>Customize Descriptions</h4>
+        <div class="col-md-6">
+          <div id='custom-descriptions'></div>
+        </div>
+        <div class="col-md-6">
+          <pre>
+            <code class="html">&lt;Lightbox
+  images={images}
+  renderDescriptionFunc={(image) => {
+    return (
+      &lt;div&gt;image.description &lt;/div&gt;
+    )
+  }}/&gt;
+            </code>
+          </pre>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.5/react.js" charset="UTF-8"></script>
