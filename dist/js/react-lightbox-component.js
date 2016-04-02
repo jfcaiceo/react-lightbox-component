@@ -21,7 +21,7 @@ module.exports = React.createClass({
         return React.createElement(
           'div',
           null,
-          'image.description'
+          image.description
         );
       }
     };
