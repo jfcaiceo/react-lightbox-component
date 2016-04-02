@@ -1,0 +1,68 @@
+@import variables
+
+.lightbox-backdrop
+  position: fixed
+  width: 100%
+  height: 100%
+  background-color: rgba(0,0,0,0.8)
+  top: 0px
+  left: 0px
+  padding: 10px
+  z-index: 100
+  .lightbox-btn
+    touch-action: manipulation
+    cursor: pointer
+    user-select: none
+    background-image: none
+    background: none
+    border: 2px solid transparent
+    color: white
+    outline: none
+    opacity: 0.5
+    @media (min-width: $medium_width)
+      &:hover
+        opacity: 1
+        transition: opacity 200ms ease
+  .lightbox-btn-close
+    position: fixed
+    right: 0px
+  .lightbox-btn-right
+    position: absolute
+    top: 50%
+    margin-top: -1.5em
+    right: 0px
+    padding-right: 0.5em
+    @media (min-width: $medium_width)
+      padding-right: 1em
+      &:hover
+        padding-left: 0.5em
+        padding-right: 0.5em
+        transition: padding 200ms ease
+  .lightbox-btn-left
+    position: absolute
+    top: 50%
+    margin-top: -1.5em
+    left: 0px
+    padding-left: 0.5em
+    @media (min-width: $medium_width)
+      padding-left: 1em
+      &:hover
+        padding-left: 0.5em
+        padding-right: 0.5em
+        transition: padding 200ms ease
+  .lightbox-title-content
+    margin-left: -10px
+    background-color: rgba(0, 0, 0, 0.2)
+    position: absolute
+    width: 100%
+    z-index: 1
+    bottom: 0
+    text-align: center
+    padding: 10px
+    .lightbox-title
+      color: white
+      font-weight: 600
+      font-size: 16px
+    .lightbox-description
+      color: #C5C5C5
+      font-size: 14px

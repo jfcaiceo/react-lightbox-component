@@ -1,0 +1,1 @@
+exports.Lightbox = require('./Lightbox');
