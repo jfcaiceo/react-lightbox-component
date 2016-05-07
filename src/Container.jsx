@@ -31,12 +31,27 @@ module.exports = React.createClass({
     };
   },
   componentWillMount: function() {
-    document.documentElement.style.overflow = 'hidden';
+    const scrollTop = document.body.scrollTop;
+    this.addClass(document.documentElement, 'lightbox-open');
+    document.documentElement.style.top = `-${scrollTop}px`;
     document.body.scroll = "no"; // ie only
   },
   componentWillUnmount: function() {
-    document.documentElement.style.overflow = 'auto';
+    const scrollTop = Math.abs(parseInt(document.documentElement.style.top))
+    this.removeClass(document.documentElement, 'lightbox-open');
+    document.documentElement.style.top = null;
+    document.body.scrollTop = scrollTop
     document.body.scroll = "yes"; // ie only
+  },
+  addClass: function (element, className) {
+    const classList = element.className.split(/\s+/);
+    if (classList.indexOf(className) === -1) {
+      element.className = classList.concat(className).join(' ');
+    }
+  },
+  removeClass: function (element, className) {
+    const classList = element.className.split(/\s+/);
+    element.className = classList.filter(name => name !== className).join(' ');
   },
   handleLeftClick: function(){
     if (this.canMoveToLeft()) {
