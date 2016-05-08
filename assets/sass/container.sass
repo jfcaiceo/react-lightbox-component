@@ -1,5 +1,10 @@
 @import variables
 
+html.lightbox-open
+  overflow: hidden
+  position: fixed
+  width: 100%
+
 .lightbox-backdrop
   position: fixed
   width: 100%
@@ -26,6 +31,7 @@
   .lightbox-btn-close
     position: fixed
     right: 0px
+    z-index: 1
   .lightbox-btn-right
     position: absolute
     top: 50%
