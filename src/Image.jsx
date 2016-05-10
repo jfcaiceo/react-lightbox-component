@@ -3,6 +3,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ImageModifiers = require('./ImageModifiers');
+var classNames = require('./classNames');
 const ZOOM_STEP = 1.10;
 const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 30), Math.pow(1 / ZOOM_STEP, 10)];
 
@@ -40,6 +41,7 @@ module.exports = React.createClass({
       document.addEventListener('touchmove', this.handleMove);
       document.addEventListener('touchend', this.handleMoveEnd);
       document.addEventListener('wheel', this.handleWheel);
+      window.setTimeout(this.handleTap, 500);
     }
   },
   componentWillUnmount: function() {
@@ -174,10 +176,33 @@ module.exports = React.createClass({
     ev = this.getEv(ev);
     if(!this.isInsideImage(ev) || ev.which != 1)
       return;
-    this.startPoints = [ev.pageX, ev.pageY];
+    const startPoints = this.startPoints = [ev.pageX, ev.pageY];
     this.setState({
       moving: true
     })
+    const _this = this;
+
+    // check if touch was a tap
+    window.setTimeout(function () {
+      if (startPoints[0] === ev.pageX && startPoints[1] == ev.pageY && !_this.state.moving
+        && classNames.contains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
+        _this.handleTap();
+      }
+    }, 200);
+  },
+  handleTap: function () {
+    classNames.toggle(this.getLightBox(), 'hide-controls')
+  },
+  getLightBox: function () {
+    return this.getParentWithClass(
+      ReactDOM.findDOMNode(this.refs.container), 'lightbox-backdrop')
+  },
+  getParentWithClass (elem, className) {
+    const parent = elem.parentNode
+    if (parent.className.split(/\s+/).indexOf(className) !== -1) {
+      return parent
+    }
+    return this.getParentWithClass(parent, className)
   },
   isInsideImage: function(ev) {
     let rect = ReactDOM.findDOMNode(this.refs.container).getBoundingClientRect();
@@ -187,7 +212,7 @@ module.exports = React.createClass({
   },
   getEv: function (ev) {
     if(ev.type === 'touchstart' || ev.type === 'touchmove' || ev.type === 'touchend')
-      return {pageX: ev.touches[0].pageX, pageY: ev.touches[0].pageY, which: 1}
+      return {pageX: ev.touches[0].pageX, pageY: ev.touches[0].pageY, which: 1, target: ev.target}
     return ev
   },
   render: function() {

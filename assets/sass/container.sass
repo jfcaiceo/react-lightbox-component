@@ -16,6 +16,29 @@ html.lightbox-open
   z-index: 100
 
 
+.lightbox-btn-left,
+.lightbox-btn-right,
+.lightbox-btn-close,
+.lightbox-title-content,
+.lightbox-modifiers-box
+  transition: opacity 200ms ease
+
+
+.hide-controls
+  @media (max-width: ($medium_width - 1))
+    .lightbox-btn-left,
+    .lightbox-btn-right
+      opacity: 0
+      pointer-events: none
+
+  @media (max-height: ($medium_height - 1))
+    .lightbox-btn-close,
+    .lightbox-title-content,
+    .lightbox-modifiers-box
+      opacity: 0
+      pointer-events: none
+
+
 .lightbox-btn
   touch-action: manipulation
   cursor: pointer
