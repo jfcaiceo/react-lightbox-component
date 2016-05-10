@@ -31,6 +31,7 @@ module.exports = React.createClass({
   componentDidMount: function() {
     this.resetImageInitialState(this.props);
     this.startPoints = null;
+    window.addEventListener('resize', this.handleWindowResize);
     if(this.props.showImageModifiers) {
       document.addEventListener('mousedown', this.handleMoveStart);
       document.addEventListener('mousemove', this.handleMove);
@@ -42,6 +43,7 @@ module.exports = React.createClass({
     }
   },
   componentWillUnmount: function() {
+    window.removeEventListener('resize', this.handleWindowResize);
     document.removeEventListener('mousedown', this.handleMoveStart);
     document.removeEventListener('mousemove', this.handleMove);
     document.removeEventListener('mouseup', this.handleMoveEnd);
@@ -72,6 +74,9 @@ module.exports = React.createClass({
       })
     };
     img.src = props.src;
+  },
+  handleWindowResize: function () {
+    this.resetImageInitialState(this.props);
   },
   handleRotate: function(angle) {
     this.setState({
