@@ -3,7 +3,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ImageModifiers = require('./ImageModifiers');
-var classNames = require('./classNames');
+var classNames = require('./utils/classNames');
 const ZOOM_STEP = 1.10;
 const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 30), Math.pow(1 / ZOOM_STEP, 10)];
 

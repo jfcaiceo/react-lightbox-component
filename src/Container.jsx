@@ -3,7 +3,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Image = require('./Image');
-var classNames = require('./classNames');
+var classNames = require('./utils/classNames');
 
 module.exports = React.createClass({
   displayName: 'Container',
