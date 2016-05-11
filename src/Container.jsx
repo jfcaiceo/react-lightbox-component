@@ -64,6 +64,9 @@ module.exports = React.createClass({
   canMoveToRight: function() {
     return (this.state.selectedImageIndex < (this.props.images.length - 1))
   },
+  toggleControls: function () {
+    classNames.toggle(this.refs.container, 'hide-controls')
+  },
   render: function() {
     let [props, state] = [this.props, this.state];
     let image = props.images[state.selectedImageIndex];
@@ -83,7 +86,7 @@ module.exports = React.createClass({
         </div>
       )
     return (
-      <div className='lightbox-backdrop'>
+      <div className='lightbox-backdrop' ref='container'>
         <div className='lightbox-btn-close'>
           <button className='lightbox-btn' onClick={props.toggleLightbox}><i className='fa fa-lg fa-times'/></button>
         </div>
@@ -95,7 +98,8 @@ module.exports = React.createClass({
             {description}
           </div>
         </div>
-        <Image src={image.src} showImageModifiers={props.showImageModifiers}/>
+        <Image src={image.src} showImageModifiers={props.showImageModifiers}
+          toggleControls={this.toggleControls} />
         {leftButton}
         {rightButton}
       </div>

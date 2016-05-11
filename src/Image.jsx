@@ -41,7 +41,7 @@ module.exports = React.createClass({
       document.addEventListener('touchmove', this.handleMove);
       document.addEventListener('touchend', this.handleMoveEnd);
       document.addEventListener('wheel', this.handleWheel);
-      window.setTimeout(this.handleTap, 500);
+      window.setTimeout(this.props.toggleControls, 500);
     }
   },
   componentWillUnmount: function() {
@@ -186,23 +186,9 @@ module.exports = React.createClass({
     window.setTimeout(function () {
       if (startPoints[0] === ev.pageX && startPoints[1] == ev.pageY && !_this.state.moving
         && classNames.contains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
-        _this.handleTap();
+        _this.props.toggleControls();
       }
     }, 200);
-  },
-  handleTap: function () {
-    classNames.toggle(this.getLightBox(), 'hide-controls')
-  },
-  getLightBox: function () {
-    return this.getParentWithClass(
-      ReactDOM.findDOMNode(this.refs.container), 'lightbox-backdrop')
-  },
-  getParentWithClass (elem, className) {
-    const parent = elem.parentNode
-    if (parent.className.split(/\s+/).indexOf(className) !== -1) {
-      return parent
-    }
-    return this.getParentWithClass(parent, className)
   },
   isInsideImage: function(ev) {
     let rect = ReactDOM.findDOMNode(this.refs.container).getBoundingClientRect();
