@@ -33,15 +33,15 @@ module.exports = React.createClass({
     this.resetImageInitialState(this.props);
     this.startPoints = null;
     window.addEventListener('resize', this.handleWindowResize);
+    document.addEventListener('mousedown', this.handleMoveStart);
+    document.addEventListener('mouseup', this.handleMoveEnd);
+    document.addEventListener('touchstart', this.handleMoveStart);
+    document.addEventListener('touchend', this.handleMoveEnd);
+    window.setTimeout(this.props.toggleControls, 500);
     if(this.props.showImageModifiers) {
-      document.addEventListener('mousedown', this.handleMoveStart);
       document.addEventListener('mousemove', this.handleMove);
-      document.addEventListener('mouseup', this.handleMoveEnd);
-      document.addEventListener('touchstart', this.handleMoveStart);
       document.addEventListener('touchmove', this.handleMove);
-      document.addEventListener('touchend', this.handleMoveEnd);
       document.addEventListener('wheel', this.handleWheel);
-      window.setTimeout(this.props.toggleControls, 500);
     }
   },
   componentWillUnmount: function() {
