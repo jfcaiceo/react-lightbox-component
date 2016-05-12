@@ -133,9 +133,9 @@ module.exports = React.createClass({
   },
   handleMove: function(ev) {
     ev = this.getEv(ev);
-    if(!this.startPoints)
-      return;
     let state = this.state;
+    if(!state.moving)
+      return;
     let posX, posY;
     switch(state.rotate) {
       case 90:
@@ -167,7 +167,6 @@ module.exports = React.createClass({
     });
   },
   handleMoveEnd: function(ev) {
-    this.startPoints = null;
     this.setState({
       moving: false
     })
@@ -176,7 +175,7 @@ module.exports = React.createClass({
     ev = this.getEv(ev);
     if(!this.isInsideImage(ev) || ev.which != 1)
       return;
-    const startPoints = this.startPoints = [ev.pageX, ev.pageY];
+    this.startPoints = [ev.pageX, ev.pageY];
     this.setState({
       moving: true
     })
@@ -184,7 +183,9 @@ module.exports = React.createClass({
 
     // check if touch was a tap
     window.setTimeout(function () {
-      if (startPoints[0] === ev.pageX && startPoints[1] == ev.pageY && !_this.state.moving
+      if (!_this.state.moving && _this.startPoints
+        && _this.startPoints[0] === ev.pageX
+        && _this.startPoints[1] === ev.pageY
         && classNames.contains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
         _this.props.toggleControls();
       }
