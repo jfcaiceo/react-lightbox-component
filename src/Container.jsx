@@ -3,6 +3,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Image = require('./Image');
+var classNames = require('./utils/classNames');
 
 module.exports = React.createClass({
   displayName: 'Container',
@@ -32,26 +33,16 @@ module.exports = React.createClass({
   },
   componentWillMount: function() {
     const scrollTop = document.body.scrollTop;
-    this.addClass(document.documentElement, 'lightbox-open');
+    classNames.add(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = `-${scrollTop}px`;
     document.body.scroll = "no"; // ie only
   },
   componentWillUnmount: function() {
     const scrollTop = Math.abs(parseInt(document.documentElement.style.top))
-    this.removeClass(document.documentElement, 'lightbox-open');
+    classNames.remove(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = null;
     document.body.scrollTop = scrollTop
     document.body.scroll = "yes"; // ie only
-  },
-  addClass: function (element, className) {
-    const classList = element.className.split(/\s+/);
-    if (classList.indexOf(className) === -1) {
-      element.className = classList.concat(className).join(' ');
-    }
-  },
-  removeClass: function (element, className) {
-    const classList = element.className.split(/\s+/);
-    element.className = classList.filter(name => name !== className).join(' ');
   },
   handleLeftClick: function(){
     if (this.canMoveToLeft()) {
@@ -73,6 +64,9 @@ module.exports = React.createClass({
   canMoveToRight: function() {
     return (this.state.selectedImageIndex < (this.props.images.length - 1))
   },
+  toggleControls: function () {
+    classNames.toggle(this.refs.container, 'hide-controls')
+  },
   render: function() {
     let [props, state] = [this.props, this.state];
     let image = props.images[state.selectedImageIndex];
@@ -92,7 +86,7 @@ module.exports = React.createClass({
         </div>
       )
     return (
-      <div className='lightbox-backdrop'>
+      <div className='lightbox-backdrop' ref='container'>
         <div className='lightbox-btn-close'>
           <button className='lightbox-btn' onClick={props.toggleLightbox}><i className='fa fa-lg fa-times'/></button>
         </div>
@@ -104,7 +98,8 @@ module.exports = React.createClass({
             {description}
           </div>
         </div>
-        <Image src={image.src} showImageModifiers={props.showImageModifiers}/>
+        <Image src={image.src} showImageModifiers={props.showImageModifiers}
+          toggleControls={this.toggleControls} />
         {leftButton}
         {rightButton}
       </div>

@@ -1,34 +1,46 @@
 @import variables
 
-.lightbox-backdrop
-  .lightbox-content-center
-    width: calc(100% - 10em)
-    height: 100%
-    position: absolute
-    left: 5em
-    @media (max-width: $medium_width)
-      width: 100%
-      left: 0px
-    .lightbox-modifiers-box
-      text-align: center
-      height: 30px
-      font-size: 1.2em
-      padding-bottom: 10px
-      .a-padding
-        padding: 2 6 3 6
-    .lightbox-image-container
-      height: calc(100% - 100px)
-      overflow: hidden
-      .lightbox-image
-        height: 100%
-        width: 100%
-        background-repeat: no-repeat
-        transition: background-size 200ms ease, background-position 200ms ease, background-image 200ms ease
-        &.moving
-          transition: none
-      .lightbox-loader
-        display: flex;
-        align-items: center
-        justify-content: center
-        height: 100%
-        color: white
+.lightbox-content-center
+  width: 100%
+  height: 100%
+  position: absolute
+
+
+.lightbox-modifiers-box
+  background-color: rgba(0, 0, 0, 0.2)
+  text-align: center
+  font-size: 1.2em
+  position: absolute
+  width: 100%
+  z-index: 1
+
+  @media (min-height: $medium_height)
+    background-color: transparent
+
+
+.lightbox-image-container
+  overflow: hidden
+
+  @media (min-width: $medium_width)
+    margin: 0 5em
+
+  @media (min-height: $medium_height)
+    height: calc(100% - 102px)
+    margin-top: 40px
+
+
+.lightbox-image
+  height: 100%
+  background-repeat: no-repeat
+  transition: background-size 200ms ease, background-position 200ms ease, background-image 200ms ease
+
+  &.moving
+    transition: none
+
+
+.lightbox-loader
+  display: flex;
+  align-items: center
+  justify-content: center
+  height: 100%
+  color: white

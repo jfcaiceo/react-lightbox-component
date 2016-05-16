@@ -37,7 +37,7 @@ module.exports = React.createClass({
         <button className='lightbox-btn' onClick={this.handleRotateClockwise}>
           <i className='fa fa-rotate-right' />
         </button>
-        <a className='lightbox-btn a-padding' download href={this.props.currentImage} >
+        <a className='lightbox-btn' download href={this.props.currentImage} >
           <i className='fa fa-download' />
         </a>
       </div>

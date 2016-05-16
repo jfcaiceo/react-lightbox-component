@@ -3,6 +3,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ImageModifiers = require('./ImageModifiers');
+var classNames = require('./utils/classNames');
 const ZOOM_STEP = 1.10;
 const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 30), Math.pow(1 / ZOOM_STEP, 10)];
 
@@ -31,17 +32,20 @@ module.exports = React.createClass({
   componentDidMount: function() {
     this.resetImageInitialState(this.props);
     this.startPoints = null;
+    window.addEventListener('resize', this.handleWindowResize);
+    document.addEventListener('mousedown', this.handleMoveStart);
+    document.addEventListener('mouseup', this.handleMoveEnd);
+    document.addEventListener('touchstart', this.handleMoveStart);
+    document.addEventListener('touchend', this.handleMoveEnd);
+    window.setTimeout(this.props.toggleControls, 500);
     if(this.props.showImageModifiers) {
-      document.addEventListener('mousedown', this.handleMoveStart);
       document.addEventListener('mousemove', this.handleMove);
-      document.addEventListener('mouseup', this.handleMoveEnd);
-      document.addEventListener('touchstart', this.handleMoveStart);
       document.addEventListener('touchmove', this.handleMove);
-      document.addEventListener('touchend', this.handleMoveEnd);
       document.addEventListener('wheel', this.handleWheel);
     }
   },
   componentWillUnmount: function() {
+    window.removeEventListener('resize', this.handleWindowResize);
     document.removeEventListener('mousedown', this.handleMoveStart);
     document.removeEventListener('mousemove', this.handleMove);
     document.removeEventListener('mouseup', this.handleMoveEnd);
@@ -72,6 +76,9 @@ module.exports = React.createClass({
       })
     };
     img.src = props.src;
+  },
+  handleWindowResize: function () {
+    this.resetImageInitialState(this.props);
   },
   handleRotate: function(angle) {
     this.setState({
@@ -126,9 +133,9 @@ module.exports = React.createClass({
   },
   handleMove: function(ev) {
     ev = this.getEv(ev);
-    if(!this.startPoints)
-      return;
     let state = this.state;
+    if(!state.moving)
+      return;
     let posX, posY;
     switch(state.rotate) {
       case 90:
@@ -160,7 +167,6 @@ module.exports = React.createClass({
     });
   },
   handleMoveEnd: function(ev) {
-    this.startPoints = null;
     this.setState({
       moving: false
     })
@@ -173,6 +179,17 @@ module.exports = React.createClass({
     this.setState({
       moving: true
     })
+    const _this = this;
+
+    // check if touch was a tap
+    window.setTimeout(function () {
+      if (!_this.state.moving && _this.startPoints
+        && _this.startPoints[0] === ev.pageX
+        && _this.startPoints[1] === ev.pageY
+        && classNames.contains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
+        _this.props.toggleControls();
+      }
+    }, 200);
   },
   isInsideImage: function(ev) {
     let rect = ReactDOM.findDOMNode(this.refs.container).getBoundingClientRect();
@@ -182,7 +199,7 @@ module.exports = React.createClass({
   },
   getEv: function (ev) {
     if(ev.type === 'touchstart' || ev.type === 'touchmove' || ev.type === 'touchend')
-      return {pageX: ev.touches[0].pageX, pageY: ev.touches[0].pageY, which: 1}
+      return {pageX: ev.touches[0].pageX, pageY: ev.touches[0].pageY, which: 1, target: ev.target}
     return ev
   },
   render: function() {
