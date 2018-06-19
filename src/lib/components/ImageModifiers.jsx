@@ -1,28 +1,34 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = React.createClass({
-  displayName: 'Image',
-  propTypes: {
-    handleRotate: React.PropTypes.func.isRequired,
-    handleZoom: React.PropTypes.func.isRequired,
-    currentImage: React.PropTypes.string.isRequired
-  },
-  handleRotateClockwise: function() {
+export default class ImageModifiers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleRotateClockwise = this.handleRotateClockwise.bind(this);
+    this.handleRotateCounterclockwise = this.handleRotateCounterclockwise.bind(this);
+    this.handleZoomIn = this.handleZoomIn.bind(this);
+    this.handleZoomOut = this.handleZoomOut.bind(this);
+  }
+
+  handleRotateClockwise() {
     this.props.handleRotate.call(this, 90);
-  },
-  handleRotateCounterclockwise: function() {
+  }
+
+  handleRotateCounterclockwise() {
     this.props.handleRotate.call(this, -90);
-  },
-  handleZoomIn: function() {
+  }
+
+  handleZoomIn() {
     this.props.handleZoom.call(this, 1, 10);
-  },
-  handleZoomOut: function() {
+  }
+
+  handleZoomOut() {
     this.props.handleZoom.call(this, -1, 10);
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <div className='lightbox-modifiers-box'>
         <button className='lightbox-btn' onClick={this.handleZoomIn}>
@@ -43,4 +49,10 @@ module.exports = React.createClass({
       </div>
     )
   }
-});
+}
+
+ImageModifiers.propTypes = {
+  handleRotate: PropTypes.func.isRequired,
+  handleZoom: PropTypes.func.isRequired,
+  currentImage: PropTypes.string.isRequired
+}

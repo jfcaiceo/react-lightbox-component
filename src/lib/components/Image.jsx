@@ -1,20 +1,29 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var ImageModifiers = require('./ImageModifiers');
-var classNames = require('./utils/classNames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import ImageModifiers from './ImageModifiers';
+import { classContains } from './utils/classNames';
+import './Image.css'
+
 const ZOOM_STEP = 1.10;
 const [MAX_ZOOM_SIZE, MIN_ZOOM_SIZE] = [Math.pow(ZOOM_STEP, 30), Math.pow(1 / ZOOM_STEP, 10)];
 
-module.exports = React.createClass({
-  displayName: 'Image',
-  propTypes: {
-    src: React.PropTypes.string.isRequired,
-    showImageModifiers: React.PropTypes.bool.isRequired
-  },
-  getInitialState: function() {
-    return {
+export default class ImageContent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.resetImageInitialState = this.resetImageInitialState.bind(this);
+    this.handleWindowResize = this.handleWindowResize.bind(this);
+    this.handleRotate = this.handleRotate.bind(this);
+    this.handleZoom = this.handleZoom.bind(this);
+    this.setZoomLimits = this.setZoomLimits.bind(this);
+    this.handleWheel = this.handleWheel.bind(this);
+    this.handleMove = this.handleMove.bind(this);
+    this.handleMoveEnd = this.handleMoveEnd.bind(this);
+    this.handleMoveStart = this.handleMoveStart.bind(this);
+    this.isInsideImage = this.isInsideImage.bind(this);
+    this.state = {
       loader: true,
       ratio: 1,
       positionX: 0,
@@ -25,11 +34,13 @@ module.exports = React.createClass({
       boxWidth: 0,
       boxHeight: 0
     };
-  },
-  componentWillReceiveProps: function(nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     this.resetImageInitialState(nextProps);
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     this.resetImageInitialState(this.props);
     this.startPoints = null;
     window.addEventListener('resize', this.handleWindowResize);
@@ -43,8 +54,9 @@ module.exports = React.createClass({
       document.addEventListener('touchmove', this.handleMove);
       document.addEventListener('wheel', this.handleWheel);
     }
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowResize);
     document.removeEventListener('mousedown', this.handleMoveStart);
     document.removeEventListener('mousemove', this.handleMove);
@@ -53,8 +65,9 @@ module.exports = React.createClass({
     document.removeEventListener('touchmove', this.handleMove);
     document.removeEventListener('touchend', this.handleMoveEnd);
     document.removeEventListener('wheel', this.handleWheel);
-  },
-  resetImageInitialState: function(props) {
+  }
+
+  resetImageInitialState(props) {
     let img = new Image();
     let _this = this;
     img.onload = function(){
@@ -76,16 +89,21 @@ module.exports = React.createClass({
       })
     };
     img.src = props.src;
-  },
-  handleWindowResize: function () {
+  }
+
+  handleWindowResize() {
     this.resetImageInitialState(this.props);
-  },
-  handleRotate: function(angle) {
+  }
+
+  handleRotate(angle) {
     this.setState({
       rotate: (360 + this.state.rotate + angle) % 360
     })
-  },
-  handleZoom: function(direction, scale = 1) {
+  }
+
+  handleZoom(direction, scale) {
+    if(!scale)
+      scale = 1;
     let percent = direction > 0 ? Math.pow(ZOOM_STEP, scale) : Math.pow(1 / ZOOM_STEP, scale);
     let ratio = this.setZoomLimits(this.state.ratio * percent);
     let state = this. state;
@@ -116,8 +134,9 @@ module.exports = React.createClass({
       positionX: newPositionX,
       positionY: newPositionY
     })
-  },
-  setZoomLimits: function(size) {
+  }
+
+  setZoomLimits(size) {
     let state = this.state;
     let originalRatio = Math.min(state.boxWidth / state.width, state.boxHeight / state.height);
     if((size / originalRatio) > MAX_ZOOM_SIZE)
@@ -126,12 +145,14 @@ module.exports = React.createClass({
       return MIN_ZOOM_SIZE * originalRatio;
     else
       return size;
-  },
-  handleWheel: function(ev) {
+  }
+
+  handleWheel(ev) {
     if(this.isInsideImage(ev))
       this.handleZoom(ev.deltaY);
-  },
-  handleMove: function(ev) {
+  }
+
+  handleMove(ev) {
     ev = this.getEv(ev);
     let state = this.state;
     if(!state.moving)
@@ -165,13 +186,15 @@ module.exports = React.createClass({
       positionX: state.positionX + posX,
       positionY: state.positionY + posY
     });
-  },
-  handleMoveEnd: function(ev) {
+  }
+
+  handleMoveEnd(ev) {
     this.setState({
       moving: false
     })
-  },
-  handleMoveStart: function(ev) {
+  }
+
+  handleMoveStart(ev) {
     ev = this.getEv(ev);
     if(!this.isInsideImage(ev) || ev.which != 1)
       return;
@@ -186,23 +209,26 @@ module.exports = React.createClass({
       if (!_this.state.moving && _this.startPoints
         && _this.startPoints[0] === ev.pageX
         && _this.startPoints[1] === ev.pageY
-        && classNames.contains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
+        && classContains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
         _this.props.toggleControls();
       }
     }, 200);
-  },
-  isInsideImage: function(ev) {
+  }
+
+  isInsideImage(ev) {
     let rect = ReactDOM.findDOMNode(this.refs.container).getBoundingClientRect();
     if(ev.pageY < rect.top || ev.pageY > rect.bottom || ev.pageX < rect.left || ev.pageX > rect.right)
       return false;
     return true;
-  },
-  getEv: function (ev) {
+  }
+
+  getEv(ev) {
     if(ev.type === 'touchstart' || ev.type === 'touchmove' || ev.type === 'touchend')
       return {pageX: ev.touches[0].pageX, pageY: ev.touches[0].pageY, which: 1, target: ev.target}
     return ev
-  },
-  render: function() {
+  }
+
+  render() {
     let [props, state] = [this.props, this.state];
     let background = `url(${props.src})`;
     let modifiers, loader;
@@ -244,4 +270,9 @@ module.exports = React.createClass({
       </div>
     )
   }
-});
+}
+
+Image.propTypes = {
+  src: PropTypes.string.isRequired,
+  showImageModifiers: PropTypes.bool.isRequired
+}

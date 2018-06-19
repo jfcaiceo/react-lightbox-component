@@ -1,73 +1,68 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Image = require('./Image');
-var classNames = require('./utils/classNames');
+import React from 'react';
+import PropTypes from 'prop-types';
+import ImageContent from './Image';
+import { classAdd, classRemove, classToggle } from './utils/classNames';
+import './Container.css'
 
-module.exports = React.createClass({
-  displayName: 'Container',
-  propTypes: {
-    selectedImage: React.PropTypes.number,
-    images: React.PropTypes.array.isRequired,
-    toggleLightbox: React.PropTypes.func.isRequired,
-    showImageModifiers: React.PropTypes.bool,
-    renderDescriptionFunc: React.PropTypes.func
-  },
-  getDefaultProps: function() {
-    return {
-      selectedImage: 0,
-      renderDescriptionFunc: (image) => {
-        return (
-            <div>
-              {image.description}
-            </div>
-        )
-      }
-    }
-  },
-  getInitialState: function() {
-    return {
-      selectedImageIndex: this.props.selectedImage
+export default class Container extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLeftClick = this.handleLeftClick.bind(this);
+    this.handleRightClick = this.handleRightClick.bind(this);
+    this.canMoveToLeft = this.canMoveToLeft.bind(this);
+    this.canMoveToRight = this.canMoveToRight.bind(this);
+    this.toggleControls = this.toggleControls.bind(this);
+    this.state = {
+      selectedImageIndex: props.selectedImage
     };
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     const scrollTop = document.body.scrollTop;
-    classNames.add(document.documentElement, 'lightbox-open');
+    classAdd(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = `-${scrollTop}px`;
     document.body.scroll = "no"; // ie only
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     const scrollTop = Math.abs(parseInt(document.documentElement.style.top))
-    classNames.remove(document.documentElement, 'lightbox-open');
+    classRemove(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = null;
     document.body.scrollTop = scrollTop
     document.body.scroll = "yes"; // ie only
-  },
-  handleLeftClick: function(){
+  }
+
+  handleLeftClick(){
     if (this.canMoveToLeft()) {
       this.setState({
         selectedImageIndex: (this.state.selectedImageIndex - 1)
       });
     };
-  },
-  handleRightClick: function(){
+  }
+
+  handleRightClick(){
     if (this.canMoveToRight()) {
       this.setState({
         selectedImageIndex: (this.state.selectedImageIndex + 1)
       });
     };
-  },
-  canMoveToLeft: function() {
+  }
+
+  canMoveToLeft() {
     return (this.state.selectedImageIndex > 0)
-  },
-  canMoveToRight: function() {
+  }
+
+  canMoveToRight() {
     return (this.state.selectedImageIndex < (this.props.images.length - 1))
-  },
-  toggleControls: function () {
-    classNames.toggle(this.refs.container, 'hide-controls')
-  },
-  render: function() {
+  }
+
+  toggleControls() {
+    classToggle(this.refs.container, 'hide-controls')
+  }
+
+  render() {
     let [props, state] = [this.props, this.state];
     let image = props.images[state.selectedImageIndex];
     let leftButton, rightButton;
@@ -98,12 +93,30 @@ module.exports = React.createClass({
             {description}
           </div>
         </div>
-        <Image src={image.src} showImageModifiers={props.showImageModifiers}
+        <ImageContent src={image.src} showImageModifiers={props.showImageModifiers}
           toggleControls={this.toggleControls} />
         {leftButton}
         {rightButton}
       </div>
     )
   }
-});
+}
 
+Container.defaultProps = {
+  selectedImage: 0,
+  renderDescriptionFunc: (image) => {
+    return (
+      <div>
+        {image.description}
+      </div>
+    )
+  }
+}
+
+Container.propTypes = {
+  selectedImage: PropTypes.number,
+  images: PropTypes.array.isRequired,
+  toggleLightbox: PropTypes.func.isRequired,
+  showImageModifiers: PropTypes.bool,
+  renderDescriptionFunc: PropTypes.func
+}
