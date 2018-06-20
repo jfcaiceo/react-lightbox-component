@@ -49,7 +49,9 @@ html.lightbox-open {
   color: white;
   outline: none;
   opacity: 0.5;
-  padding: 10px;
+  padding: 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
 }
 
 .lightbox-btn:hover {
@@ -117,6 +119,8 @@ html.lightbox-open {
   bottom: 0;
   text-align: center;
   padding: 10px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
 }
 
 .lightbox-title {

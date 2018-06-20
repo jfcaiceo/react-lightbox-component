@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ImageModifiers from './ImageModifiers';
-import { classContains } from './utils/classNames';
+import { containsClass } from './utils/ClassNames';
 import './Image.css'
 
 const ZOOM_STEP = 1.10;
@@ -34,10 +34,6 @@ export default class ImageContent extends React.Component {
       boxWidth: 0,
       boxHeight: 0
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.resetImageInitialState(nextProps);
   }
 
   componentDidMount() {
@@ -209,7 +205,7 @@ export default class ImageContent extends React.Component {
       if (!_this.state.moving && _this.startPoints
         && _this.startPoints[0] === ev.pageX
         && _this.startPoints[1] === ev.pageY
-        && classContains(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
+        && containsClass(ev.target, ['lightbox-backdrop', 'lightbox-image'])) {
         _this.props.toggleControls();
       }
     }, 200);

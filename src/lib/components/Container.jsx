@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImageContent from './Image';
-import { classAdd, classRemove, classToggle } from './utils/classNames';
+import { addClass, removeClass, classToggle } from './utils/ClassNames';
 import './Container.css'
 
 export default class Container extends React.Component {
@@ -19,16 +19,16 @@ export default class Container extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const scrollTop = document.body.scrollTop;
-    classAdd(document.documentElement, 'lightbox-open');
+    addClass(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = `-${scrollTop}px`;
     document.body.scroll = "no"; // ie only
   }
 
   componentWillUnmount() {
     const scrollTop = Math.abs(parseInt(document.documentElement.style.top))
-    classRemove(document.documentElement, 'lightbox-open');
+    removeClass(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = null;
     document.body.scrollTop = scrollTop
     document.body.scroll = "yes"; // ie only
@@ -93,8 +93,10 @@ export default class Container extends React.Component {
             {description}
           </div>
         </div>
-        <ImageContent src={image.src} showImageModifiers={props.showImageModifiers}
-          toggleControls={this.toggleControls} />
+        <ImageContent key={image.src}
+                      src={image.src}
+                      showImageModifiers={props.showImageModifiers}
+                      toggleControls={this.toggleControls} />
         {leftButton}
         {rightButton}
       </div>

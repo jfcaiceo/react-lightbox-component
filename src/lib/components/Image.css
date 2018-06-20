@@ -19,27 +19,21 @@
   }
 }
 
-.lightbox-image-container {
-  overflow: hidden;
-}
-
 @media (min-width: 768px) {
   .lightbox-image-container {
     margin: 0 5em;
   }
 }
 
-@media (min-height: 600px) {
-  .lightbox-image-container {
-    height: calc(100% - 102px);
-    margin-top: 40px;
-  }
+.lightbox-image-container {
+  overflow: hidden;
+  height: calc(100% - 102px);
+  margin-top: 40px;
 }
 
 .lightbox-image {
   height: 100%;
   background-repeat: no-repeat;
-  transition: background-size 200ms ease, background-position 200ms ease, background-image 200ms ease;
 }
 
 .lightbox-image.moving {
