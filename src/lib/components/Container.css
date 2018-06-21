@@ -46,16 +46,17 @@ html.lightbox-open {
   background-image: none;
   background: none;
   border: 2px solid transparent;
-  color: white;
   outline: none;
   opacity: 0.5;
   padding: 8px;
-  font-size: 14px;
-  line-height: 1.42857143;
 }
 
 .lightbox-btn:hover {
   color: white;
+}
+
+.lightbox-btn-icon {
+  fill: white;
 }
 
 @media (min-width: 768px) {

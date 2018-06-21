@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from './Icon';
 
 export default class ImageModifiers extends React.Component {
   constructor(props) {
@@ -30,19 +31,19 @@ export default class ImageModifiers extends React.Component {
     return (
       <div className='lightbox-modifiers-box'>
         <button className='lightbox-btn' onClick={this.handleZoomIn}>
-          <i className='fa fa-search-plus'/>
+          <Icon icon="zoom-in" aditionalClass="lightbox-btn-icon" />
         </button>
         <button className='lightbox-btn' onClick={this.handleZoomOut}>
-          <i className='fa fa-search-minus' />
+          <Icon icon="zoom-out" aditionalClass="lightbox-btn-icon" />
         </button>
         <button className='lightbox-btn' onClick={this.handleRotateCounterclockwise}>
-          <i className='fa fa-rotate-left'/>
+          <Icon icon="rotate-left" aditionalClass="lightbox-btn-icon" />
         </button>
         <button className='lightbox-btn' onClick={this.handleRotateClockwise}>
-          <i className='fa fa-rotate-right' />
+          <Icon icon="rotate-right" aditionalClass="lightbox-btn-icon" />
         </button>
         <a className='lightbox-btn' target="_blank" download href={this.props.currentImage} >
-          <i className='fa fa-download' />
+          <Icon icon="download" aditionalClass="lightbox-btn-icon" />
         </a>
       </div>
     )

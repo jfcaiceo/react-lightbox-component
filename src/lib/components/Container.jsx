@@ -2,6 +2,7 @@ import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group'
 import PropTypes from 'prop-types';
 import ImageContent from './Image';
+import Icon from './Icon';
 import { addClass, removeClass, classToggle } from './utils/classNames';
 import './Container.css'
 
@@ -91,19 +92,25 @@ export default class Container extends React.Component {
     if(this.canMoveToLeft())
       leftButton = (
         <div className='lightbox-btn-left'>
-          <button className='lightbox-btn' onClick={this.handleLeftClick}><i className='fa fa-3x fa-chevron-left'/></button>
+          <button className="lightbox-btn" onClick={this.handleLeftClick}>
+            <Icon icon='left-arrow' aditionalClass="lightbox-btn-icon" size={50}/>
+          </button>
         </div>
       )
     if(this.canMoveToRight())
       rightButton = (
         <div className='lightbox-btn-right'>
-          <button className='lightbox-btn' onClick={this.handleRightClick}><i className='fa fa-3x fa-chevron-right'/></button>
+          <button className="lightbox-btn" onClick={this.handleRightClick}>
+            <Icon icon='right-arrow' aditionalClass="lightbox-btn-icon" size={50}/>
+          </button>
         </div>
       )
     return (
       <div className='lightbox-backdrop' ref='container'>
         <div className='lightbox-btn-close'>
-          <button className='lightbox-btn' onClick={props.toggleLightbox}><i className='fa fa-lg fa-times'/></button>
+          <button className='lightbox-btn' onClick={props.toggleLightbox}>
+            <Icon icon='close' aditionalClass="lightbox-btn-icon" size={30}/>
+          </button>
         </div>
         <div className='lightbox-title-content'>
           <div className='lightbox-title'>

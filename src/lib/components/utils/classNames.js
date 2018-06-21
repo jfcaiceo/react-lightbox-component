@@ -1,4 +1,7 @@
-export function classGetNames (element) { return element.className.split(/\s+/) }
+export function classGetNames (element) {
+  if(!element.className || typeof element.className !== 'string') return [];
+  return element.className.split(/\s+/)
+}
 
 export function containsClass (element, classNames) {
   classNames = [].concat(classNames)
