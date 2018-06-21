@@ -13,6 +13,7 @@ export default class Container extends React.Component {
     this.canMoveToLeft = this.canMoveToLeft.bind(this);
     this.canMoveToRight = this.canMoveToRight.bind(this);
     this.toggleControls = this.toggleControls.bind(this);
+    this.handleKeyboard = this.handleKeyboard.bind(this);
     this.state = {
       selectedImageIndex: props.selectedImage,
       direction: 'none'
@@ -20,6 +21,7 @@ export default class Container extends React.Component {
   }
 
   componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyboard);
     const scrollTop = document.body.scrollTop;
     addClass(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = `-${scrollTop}px`;
@@ -27,11 +29,26 @@ export default class Container extends React.Component {
   }
 
   componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyboard);
     const scrollTop = Math.abs(parseInt(document.documentElement.style.top, 10))
     removeClass(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = null;
     document.body.scrollTop = scrollTop
     document.body.scroll = "yes"; // ie only
+  }
+
+  handleKeyboard(ev) {
+    const key = ev.keyCode ? ev.keyCode : ev.which;
+    switch(key){
+      case 37:
+        return this.handleLeftClick();
+      case 39:
+        return this.handleRightClick();
+      case 27:
+        return this.props.toggleLightbox();
+      default:
+        break;
+    }
   }
 
   handleLeftClick(){
