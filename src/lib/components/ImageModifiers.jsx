@@ -41,7 +41,7 @@ export default class ImageModifiers extends React.Component {
         <button className='lightbox-btn' onClick={this.handleRotateClockwise}>
           <i className='fa fa-rotate-right' />
         </button>
-        <a className='lightbox-btn' download href={this.props.currentImage} >
+        <a className='lightbox-btn' target="_blank" download href={this.props.currentImage} >
           <i className='fa fa-download' />
         </a>
       </div>
