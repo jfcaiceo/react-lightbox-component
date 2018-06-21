@@ -71,6 +71,8 @@ export default class ImageContent extends React.Component {
       let box = ReactDOM.findDOMNode(_this.refs.container);
       let [boxWidth, boxHeight] = [box.offsetWidth, box.offsetHeight]
       let ratio = Math.min(boxWidth / width, boxHeight / height);
+      if(isNaN(ratio))
+        ratio = 1;
       _this.setState({
         loader: false,
         ratio: ratio,

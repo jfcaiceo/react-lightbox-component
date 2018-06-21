@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import { CSSTransitionGroup } from 'react-transition-group'
 import PropTypes from 'prop-types';
 import ImageContent from './Image';
 import { addClass, removeClass, classToggle } from './utils/ClassNames';
@@ -15,7 +16,8 @@ export default class Container extends React.Component {
     this.canMoveToRight = this.canMoveToRight.bind(this);
     this.toggleControls = this.toggleControls.bind(this);
     this.state = {
-      selectedImageIndex: props.selectedImage
+      selectedImageIndex: props.selectedImage,
+      direction: 'none'
     };
   }
 
@@ -37,7 +39,8 @@ export default class Container extends React.Component {
   handleLeftClick(){
     if (this.canMoveToLeft()) {
       this.setState({
-        selectedImageIndex: (this.state.selectedImageIndex - 1)
+        selectedImageIndex: (this.state.selectedImageIndex - 1),
+        direction: 'left'
       });
     };
   }
@@ -45,7 +48,8 @@ export default class Container extends React.Component {
   handleRightClick(){
     if (this.canMoveToRight()) {
       this.setState({
-        selectedImageIndex: (this.state.selectedImageIndex + 1)
+        selectedImageIndex: (this.state.selectedImageIndex + 1),
+        direction: 'right'
       });
     };
   }
@@ -67,6 +71,7 @@ export default class Container extends React.Component {
     let image = props.images[state.selectedImageIndex];
     let leftButton, rightButton;
     let description = props.renderDescriptionFunc.call(this, image);
+    const transitionName = 'lightbox-transition-image';
 
     if(this.canMoveToLeft())
       leftButton = (
@@ -93,10 +98,24 @@ export default class Container extends React.Component {
             {description}
           </div>
         </div>
-        <ImageContent key={image.src}
-                      src={image.src}
-                      showImageModifiers={props.showImageModifiers}
-                      toggleControls={this.toggleControls} />
+        <CSSTransitionGroup transitionName={transitionName}
+                                 transitionAppear={true}
+                                 transitionAppearTimeout={300}
+                                 transitionEnterTimeout={300}
+                                 transitionLeaveTimeout={300}
+                                 transitionName={ {
+    enter: `${transitionName}-enter-${state.direction}`,
+    enterActive: `${transitionName}-enter-${state.direction}-active`,
+    leave: `${transitionName}-leave-${state.direction}`,
+    leaveActive: `${transitionName}-leave-${state.direction}-active`,
+    appear: `${transitionName}-appear`,
+    appearActive: `${transitionName}-appear-active`
+  } }>
+          <ImageContent key={image.src}
+                        src={image.src}
+                        showImageModifiers={props.showImageModifiers}
+                        toggleControls={this.toggleControls} />
+        </CSSTransitionGroup>
         {leftButton}
         {rightButton}
       </div>
