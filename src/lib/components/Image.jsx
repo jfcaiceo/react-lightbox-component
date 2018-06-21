@@ -1,10 +1,8 @@
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ImageModifiers from './ImageModifiers';
-import { containsClass } from './utils/ClassNames';
+import { containsClass } from './utils/classNames';
 import './Image.css'
 
 const ZOOM_STEP = 1.10;
@@ -104,7 +102,7 @@ export default class ImageContent extends React.Component {
       scale = 1;
     let percent = direction > 0 ? Math.pow(ZOOM_STEP, scale) : Math.pow(1 / ZOOM_STEP, scale);
     let ratio = this.setZoomLimits(this.state.ratio * percent);
-    let state = this. state;
+    let state = this.state;
     let delta = 0.05;
     let newPositionX, newPositionY
 
@@ -194,7 +192,7 @@ export default class ImageContent extends React.Component {
 
   handleMoveStart(ev) {
     ev = this.getEv(ev);
-    if(!this.isInsideImage(ev) || ev.which != 1)
+    if(!this.isInsideImage(ev) || ev.which !== 1)
       return;
     this.startPoints = [ev.pageX, ev.pageY];
     this.setState({

@@ -1,10 +1,8 @@
-'use strict';
-
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group'
 import PropTypes from 'prop-types';
 import ImageContent from './Image';
-import { addClass, removeClass, classToggle } from './utils/ClassNames';
+import { addClass, removeClass, classToggle } from './utils/classNames';
 import './Container.css'
 
 export default class Container extends React.Component {
@@ -29,7 +27,7 @@ export default class Container extends React.Component {
   }
 
   componentWillUnmount() {
-    const scrollTop = Math.abs(parseInt(document.documentElement.style.top))
+    const scrollTop = Math.abs(parseInt(document.documentElement.style.top, 10))
     removeClass(document.documentElement, 'lightbox-open');
     document.documentElement.style.top = null;
     document.body.scrollTop = scrollTop
@@ -98,19 +96,18 @@ export default class Container extends React.Component {
             {description}
           </div>
         </div>
-        <CSSTransitionGroup transitionName={transitionName}
-                                 transitionAppear={true}
-                                 transitionAppearTimeout={300}
-                                 transitionEnterTimeout={300}
-                                 transitionLeaveTimeout={300}
-                                 transitionName={ {
-    enter: `${transitionName}-enter-${state.direction}`,
-    enterActive: `${transitionName}-enter-${state.direction}-active`,
-    leave: `${transitionName}-leave-${state.direction}`,
-    leaveActive: `${transitionName}-leave-${state.direction}-active`,
-    appear: `${transitionName}-appear`,
-    appearActive: `${transitionName}-appear-active`
-  } }>
+        <CSSTransitionGroup transitionAppear={true}
+                            transitionAppearTimeout={300}
+                            transitionEnterTimeout={300}
+                            transitionLeaveTimeout={300}
+                            transitionName={ {
+                              enter: `${transitionName}-enter-${state.direction}`,
+                              enterActive: `${transitionName}-enter-${state.direction}-active`,
+                              leave: `${transitionName}-leave-${state.direction}`,
+                              leaveActive: `${transitionName}-leave-${state.direction}-active`,
+                              appear: `${transitionName}-appear`,
+                              appearActive: `${transitionName}-appear-active`
+                            } }>
           <ImageContent key={image.src}
                         src={image.src}
                         showImageModifiers={props.showImageModifiers}
