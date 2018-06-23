@@ -1,0 +1,29 @@
+.lightbox-btn {
+  touch-action: manipulation;
+  cursor: pointer;
+  user-select: none;
+  background-image: none;
+  background: none;
+  border: 1px solid transparent;
+  fill: white;
+  opacity: 0.8;
+  outline: none;
+  margin: 2px 2px;
+  padding: 0 0;
+}
+
+.lightbox-btn:hover {
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+.lightbox-btn--ripple circle {
+  fill: none;
+}
+
+.lightbox-btn--ripple:hover circle {
+  transform: scale(3);
+  transform-origin: 33% 33%;
+  fill: #6d6c6c;
+  transition: transform 200ms ease;
+}
