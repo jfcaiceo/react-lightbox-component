@@ -19,22 +19,21 @@ Features:
 ## Basic Usage
 
 ```
-var Lightbox = require('react-lightbox-component').Lightbox;
+import Lightbox from 'react-lightbox-component';
 
-var LightboxView = React.createClass({
-  render: function() {
-    var images = [
-      {
-        src: 'some image url',
-        title: 'image title',
-        description: 'image description'
-      }
-    ];
-    return (
-      <Lightbox images={images} />
-    );
-  },
-});
+const App = () => (
+  <div>
+    <Lightbox images={
+      [
+        {
+          src: 'some image url',
+          title: 'image title',
+          description: 'image description'
+        }
+      ]
+    }/>
+  </div>
+);
 ```
 
 ## License

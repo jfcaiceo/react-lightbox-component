@@ -1,0 +1,139 @@
+html.lightbox-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+.lightbox-backdrop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+}
+
+.lightbox-btn-left,
+.lightbox-btn-right,
+.lightbox-btn-close,
+.lightbox-title-content,
+.lightbox-modifiers-box {
+  transition: opacity 200ms ease;
+}
+
+@media (max-width: 767px) {
+  .hide-controls .lightbox-btn-left,
+  .hide-controls .lightbox-btn-right {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (max-height: 599px) {
+  .hide-controls .lightbox-btn-close,
+  .hide-controls .lightbox-title-content,
+  .hide-controls .lightbox-modifiers-box {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.lightbox-btn-close {
+  position: fixed;
+  left: 0px;
+  z-index: 2;
+}
+
+.lightbox-btn-right {
+  position: absolute;
+  top: 50%;
+  margin-top: -1.5em;
+  right: 0px;
+}
+
+.lightbox-btn-left {
+  position: absolute;
+  top: 50%;
+  margin-top: -1.5em;
+  left: 0px;
+}
+
+@media (min-width: 768px) {
+  .lightbox-btn-right {
+    padding-right: 10px;
+  }
+
+  .lightbox-btn-left {
+    padding-left: 10px;
+  }
+}
+
+.lightbox-title-content {
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  bottom: 0;
+  text-align: center;
+  padding: 10px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
+}
+
+.lightbox-title {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.lightbox-description {
+  color: #C5C5C5;
+  font-size: 14px;
+}
+
+.lightbox-transition-image-appear {
+  opacity: 0.1;
+}
+
+.lightbox-transition-image-appear.lightbox-transition-image-appear-active {
+  opacity: 1;
+  transition: opacity .3s ease-in;
+}
+
+.lightbox-transition-image-enter-right {
+  transform: translate(100%);
+}
+
+.lightbox-transition-image-enter-right.lightbox-transition-image-enter-right-active {
+  transform: translate(0%);
+  transition: transform 300ms ease-in-out;
+}
+
+.lightbox-transition-image-leave-right {
+  transform: translate(0%);
+}
+
+.lightbox-transition-image-leave-right.lightbox-transition-image-leave-right-active {
+  transform: translate(-100%);
+  transition: transform 300ms ease-in-out;
+}
+
+.lightbox-transition-image-enter-left {
+  transform: translate(-100%);
+}
+
+.lightbox-transition-image-enter-left.lightbox-transition-image-enter-left-active {
+  transform: translate(0%);
+  transition: transform 300ms ease-in-out;
+}
+
+.lightbox-transition-image-leave-left {
+  transform: translate(0%);
+}
+
+.lightbox-transition-image-leave-left.lightbox-transition-image-leave-left-active {
+  transform: translate(100%);
+  transition: transform 300ms ease-in-out;
+}
