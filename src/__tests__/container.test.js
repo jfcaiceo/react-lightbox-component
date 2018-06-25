@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils'
 import Lightbox from '../lib/';
 import Container from '../lib/components/Container';
@@ -36,12 +35,15 @@ describe("Lightbox container component", () => {
 
     var image = ReactTestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail')[0];
     ReactTestUtils.Simulate.click(image)
-    
-    var closeButtonContainer = ReactTestUtils.findRenderedDOMComponentWithClass(lightbox, 'lightbox-btn-close');
+
+    var container = document.getElementsByClassName('lightbox-backdrop')
+    expect(container.length).toEqual(1);
+
+    var closeButtonContainer = document.getElementsByClassName('lightbox-btn-close')[0];
     var closeButton = closeButtonContainer.children[0];
     ReactTestUtils.Simulate.click(closeButton);
 
-    var container = ReactTestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-backdrop')
+    var container = document.getElementsByClassName('lightbox-backdrop')
     expect(container.length).toEqual(0);
   });
 });

@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils'
 import ImageContent from '../lib/components/Image';
 import { dummyData } from './utils/defaultImageData';

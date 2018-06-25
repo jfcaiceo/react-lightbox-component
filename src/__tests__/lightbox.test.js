@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils'
 import Lightbox from '../lib';
-import Container from '../lib/components/Container';
+import BodyPortal from '../lib/components/BodyPortal';
 import { dummyData } from './utils/defaultImageData';
 
 describe("Lightbox component", function() {
@@ -21,12 +21,12 @@ describe("Lightbox component", function() {
   });
 
   it("renders container on image click", function() {
-    var container = ReactTestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-backdrop')
+    var container = document.getElementsByClassName('lightbox-backdrop')
     expect(container.length).toEqual(0);
     var image = ReactTestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail')[0];
     ReactTestUtils.Simulate.click(image)
     
-    container = ReactTestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-backdrop')
+    container = document.getElementsByClassName('lightbox-backdrop')
     expect(container.length).toEqual(1);
   });
 
@@ -35,7 +35,8 @@ describe("Lightbox component", function() {
     var image = ReactTestUtils.scryRenderedDOMComponentsWithClass(lightbox, 'lightbox-img-thumbnail')[imageIndex];
     ReactTestUtils.Simulate.click(image);
     
-    var container = ReactTestUtils.findRenderedComponentWithType(lightbox, Container); 
+    var container = ReactTestUtils.findRenderedComponentWithType(lightbox, BodyPortal).props.children;
+
     expect(container.props.selectedImage).toEqual(imageIndex);
   });
 });
