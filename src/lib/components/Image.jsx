@@ -268,7 +268,7 @@ export default class ImageContent extends React.Component {
   }
 }
 
-ImageContent.propTypes = {
+Image.propTypes = {
   src: PropTypes.string.isRequired,
   showImageModifiers: PropTypes.bool.isRequired
 }
