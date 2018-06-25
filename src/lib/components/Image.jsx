@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ImageModifiers from './ImageModifiers';
+import Icon from './Icon';
 import { containsClass } from './utils/classNames';
 import './Image.css'
 
@@ -240,7 +241,7 @@ export default class ImageContent extends React.Component {
       background = 'none';
       loader = (
         <div className='lightbox-loader'>
-          <i className="fa fa-3x fa-spinner fa-spin" />
+          <Icon icon="spinner" size={ 58 } />
         </div>
       )
     }

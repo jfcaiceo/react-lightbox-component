@@ -39,35 +39,9 @@ html.lightbox-open {
   }
 }
 
-.lightbox-btn {
-  touch-action: manipulation;
-  cursor: pointer;
-  user-select: none;
-  background-image: none;
-  background: none;
-  border: 2px solid transparent;
-  color: white;
-  outline: none;
-  opacity: 0.5;
-  padding: 8px;
-  font-size: 14px;
-  line-height: 1.42857143;
-}
-
-.lightbox-btn:hover {
-  color: white;
-}
-
-@media (min-width: 768px) {
-  .lightbox-btn:hover {
-    opacity: 1;
-    transition: opacity 200ms ease;
-  }
-}
-
 .lightbox-btn-close {
   position: fixed;
-  right: 0px;
+  left: 0px;
   z-index: 2;
 }
 
@@ -76,19 +50,6 @@ html.lightbox-open {
   top: 50%;
   margin-top: -1.5em;
   right: 0px;
-  padding-right: 0.5em;
-}
-
-@media (min-width: 768px) {
-  .lightbox-btn-right {
-    padding-right: 1em;
-  }
-
-  .lightbox-btn-right:hover {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    transition: padding 200ms ease;
-  }
 }
 
 .lightbox-btn-left {
@@ -96,23 +57,21 @@ html.lightbox-open {
   top: 50%;
   margin-top: -1.5em;
   left: 0px;
-  padding-left: 0.5em;
 }
 
 @media (min-width: 768px) {
-  .lightbox-btn-left {
-    padding-left: 1em;
+  .lightbox-btn-right {
+    padding-right: 10px;
   }
 
-  .lightbox-btn-left:hover {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    transition: padding 200ms ease;
+  .lightbox-btn-left {
+    padding-left: 10px;
   }
 }
 
 .lightbox-title-content {
   background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
   position: absolute;
   width: 100%;
   z-index: 1;

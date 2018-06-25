@@ -2,6 +2,7 @@ import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group'
 import PropTypes from 'prop-types';
 import ImageContent from './Image';
+import Button from './Button';
 import { addClass, removeClass, classToggle } from './utils/classNames';
 import './Container.css'
 
@@ -91,19 +92,19 @@ export default class Container extends React.Component {
     if(this.canMoveToLeft())
       leftButton = (
         <div className='lightbox-btn-left'>
-          <button className='lightbox-btn' onClick={this.handleLeftClick}><i className='fa fa-3x fa-chevron-left'/></button>
+          <Button icon="left-arrow" onClick={this.handleLeftClick} size={ 56 } hasRipple={ true } />
         </div>
       )
     if(this.canMoveToRight())
       rightButton = (
         <div className='lightbox-btn-right'>
-          <button className='lightbox-btn' onClick={this.handleRightClick}><i className='fa fa-3x fa-chevron-right'/></button>
+          <Button icon="right-arrow" onClick={this.handleRightClick} size={ 56 } hasRipple={ true } />
         </div>
       )
     return (
       <div className='lightbox-backdrop' ref='container'>
         <div className='lightbox-btn-close'>
-          <button className='lightbox-btn' onClick={props.toggleLightbox}><i className='fa fa-lg fa-times'/></button>
+          <Button icon="back-arrow" onClick={props.toggleLightbox} size={ 34 } hasRipple={ true } />
         </div>
         <div className='lightbox-title-content'>
           <div className='lightbox-title'>
