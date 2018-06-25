@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from './Container';
+import BodyPortal from './BodyPortal';
 import './Lightbox.css'
 
 export default class Lightbox extends React.Component {
@@ -35,10 +36,13 @@ export default class Lightbox extends React.Component {
     let container;
     if (this.state.showLightbox)
       container = (
-        <Container
-          {...this.props} 
-          toggleLightbox={this.toggleLightbox}
-          selectedImage={this.state.selectedImage} />
+        <BodyPortal>
+          <Container
+            {...this.props}
+            toggleLightbox={this.toggleLightbox}
+            selectedImage={this.state.selectedImage}
+          />
+        </BodyPortal>
       )
 
     return (
@@ -54,7 +58,7 @@ Lightbox.defaultProps = {
   showImageModifiers: true,
   thumbnailWidth: '80px',
   thumbnailHeight: '80px',
-  renderImageFunc: (idx, image, toggleLightbox, width, height) => { 
+  renderImageFunc: (idx, image, toggleLightbox, width, height) => {
     return (
       <img
         key={idx}
