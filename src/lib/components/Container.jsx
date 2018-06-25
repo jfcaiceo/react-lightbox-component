@@ -6,6 +6,8 @@ import Button from './Button';
 import { addClass, removeClass, classToggle } from './utils/classNames';
 import './Container.css'
 
+const transitionTime = 300;
+const transitionDelta = 50;
 export default class Container extends React.Component {
   constructor(props) {
     super(props);
@@ -40,6 +42,11 @@ export default class Container extends React.Component {
 
   handleKeyboard(ev) {
     const key = ev.keyCode ? ev.keyCode : ev.which;
+    if(this.timeLastTransition &&
+      ((new Date()) - this.timeLastTransition) < transitionTime + transitionDelta) {
+      return;
+    }
+    this.timeLastTransition = new Date();
     switch(key){
       case 37:
         return this.handleLeftClick();
@@ -115,9 +122,9 @@ export default class Container extends React.Component {
           </div>
         </div>
         <CSSTransitionGroup transitionAppear={true}
-                            transitionAppearTimeout={300}
-                            transitionEnterTimeout={300}
-                            transitionLeaveTimeout={300}
+                            transitionAppearTimeout={transitionTime}
+                            transitionEnterTimeout={transitionTime}
+                            transitionLeaveTimeout={transitionTime}
                             transitionName={ {
                               enter: `${transitionName}-enter-${state.direction}`,
                               enterActive: `${transitionName}-enter-${state.direction}-active`,

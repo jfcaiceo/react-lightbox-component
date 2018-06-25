@@ -10,6 +10,7 @@
   outline: none;
   margin: 2px 2px;
   padding: 0 0;
+  -webkit-tap-highlight-color: #ffffff00;
 }
 
 .lightbox-btn:hover {
@@ -24,6 +25,6 @@
 .lightbox-btn--ripple:hover circle {
   transform: scale(3);
   transform-origin: 33% 33%;
-  fill: #6d6c6c;
+  fill: #64646480;
   transition: transform 200ms ease;
 }
