@@ -17,13 +17,32 @@ export default class Container extends React.Component {
     this.canMoveToRight = this.canMoveToRight.bind(this);
     this.toggleControls = this.toggleControls.bind(this);
     this.handleKeyboard = this.handleKeyboard.bind(this);
+    this.getDescriptions = this.getDescriptions.bind(this);
     this.state = {
       selectedImageIndex: props.selectedImage,
-      direction: 'none'
+      direction: 'none',
+      imagesDescriptions: {}
     };
   }
 
+  getDescriptions(){
+    let images = this.state.imagesDescriptions;
+    this.props.images.forEach((image, index) => {
+      if(!image.description) return;
+      if(image.description.then){ //if promise
+        image.description.then((data) => {
+          images[index] = data.data.first_name;
+          this.setState({imagesDescriptions: images});
+        });
+        return;
+      }
+      images[index] = image.description;
+      this.setState({imagesDescriptions: images});
+    });
+  }
+
   componentDidMount() {
+    this.getDescriptions();
     document.addEventListener('keydown', this.handleKeyboard);
     const scrollTop = document.body.scrollTop;
     addClass(document.documentElement, 'lightbox-open');
@@ -93,7 +112,8 @@ export default class Container extends React.Component {
     let [props, state] = [this.props, this.state];
     let image = props.images[state.selectedImageIndex];
     let leftButton, rightButton;
-    let description = props.renderDescriptionFunc.call(this, image);
+    let descriptionText = state.imagesDescriptions[state.selectedImageIndex];
+    let description = props.renderDescriptionFunc.call(this, descriptionText);
     const transitionName = 'lightbox-transition-image';
 
     if(this.canMoveToLeft())
@@ -147,10 +167,10 @@ export default class Container extends React.Component {
 
 Container.defaultProps = {
   selectedImage: 0,
-  renderDescriptionFunc: (image) => {
+  renderDescriptionFunc: (descriptionText) => {
     return (
       <div>
-        {image.description}
+        {descriptionText}
       </div>
     )
   }
