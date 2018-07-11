@@ -170,7 +170,7 @@ Container.defaultProps = {
   renderDescriptionFunc: (descriptionText) => {
     return (
       <div>
-        {descriptionText}
+        {String(descriptionText)}
       </div>
     )
   }
