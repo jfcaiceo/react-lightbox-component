@@ -31,7 +31,7 @@ export default class Container extends React.Component {
       if(!image.description) return;
       if(image.description.then){ //if promise
         image.description.then((data) => {
-          images[index] = data.data.first_name;
+          images[index] = data;
           this.setState({imagesDescriptions: images});
         });
         return;
