@@ -1,5 +1,5 @@
 {
-  "name": "react-lightbox-component",
+  "name": "@gaborottlik/react-lightbox-component",
   "version": "1.2.2",
   "description": "An image lightbox component for ReactJS",
   "author": "Jose Francisco Caiceo",
